@@ -27,6 +27,14 @@ class MakeFormLiveService
     end
   end
 
+  def make_language_live
+    if @language == "en"
+      make_english_live
+    else
+      make_welsh_live
+    end
+  end
+
   def page_title
     return I18n.t("page_titles.your_form_is_live") if @current_form_was_archived
     return I18n.t("page_titles.your_welsh_form_is_live") if @current_form_was_live && @language == "cy"
@@ -47,6 +55,14 @@ class MakeFormLiveService
   end
 
 private
+
+  def make_english_live
+    @current_form.make_english_version_live!
+  end
+
+  def make_welsh_live
+    @current_form.make_welsh_version_live!
+  end
 
   def live_form_submission_email_has_changed
     @current_form_was_live && @current_live_form.submission_email != @current_form.submission_email

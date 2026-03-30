@@ -44,7 +44,7 @@
       </p>
 
       <% if language == "en" %>
-        <% if current_form.welsh_completed %>
+        <% if current_form.can_make_language_live?(language: "cy") %>
           <%= f.govuk_collection_radio_buttons :confirm, @go_to_make_welsh_live_input.values, :itself, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
           <%= f.govuk_submit t("save_and_continue") %>
         <% else %>

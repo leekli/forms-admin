@@ -1481,4 +1481,218 @@ RSpec.describe Form, type: :model do
       end
     end
   end
+
+  describe "#can_make_language_live" do
+    let(:form) { create :form }
+
+    before do
+      form.set_task_status_service(TaskStatusService.new(form:, current_user:))
+    end
+
+    context "when the language being checked is English" do
+      let(:language) { "en" }
+
+      context "when the form is draft" do
+        context "when the form does not have all mandatory tasks completed" do
+          let(:form) { create :form }
+
+          it "returns false" do
+            expect(form.can_make_language_live?(language:)).to be false
+          end
+        end
+
+        context "when the form has all mandatory tasks completed" do
+          let(:form) { create :form, :ready_for_live }
+
+          context "when the form does not have a live English form document" do
+            context "when the form does not have a live Welsh form document" do
+              context "when the Welsh task has not been started" do
+                it "returns true" do
+                  expect(form.can_make_language_live?(language:)).to be true
+                end
+              end
+
+              context "when the Welsh task is still in progress" do
+                let(:form) { create :form, :ready_for_live, :with_welsh_translation, welsh_completed: false }
+
+                it "returns true" do
+                  expect(form.can_make_language_live?(language:)).to be true
+                end
+              end
+
+              context "when the Welsh task is complete" do
+                let(:form) { create :form, :ready_for_live, :with_welsh_translation }
+
+                it "returns true" do
+                  expect(form.can_make_language_live?(language:)).to be true
+                end
+              end
+            end
+
+            context "when the form already has a live Welsh form document" do
+              before do
+                create :form_document, :live, form:, language: "cy", content: form.as_form_document
+              end
+
+              it "returns false" do
+                expect(form.can_make_language_live?(language:)).to be false
+              end
+            end
+          end
+
+          context "when the form already has a live English form document" do
+            before do
+              create :form_document, :live, form:, language: "en", content: form.as_form_document
+            end
+
+            it "returns true" do
+              expect(form.can_make_language_live?(language:)).to be true
+            end
+          end
+        end
+      end
+
+      context "when the form is live" do
+        context "when the form has all mandatory tasks completed" do
+          let(:form) { create :form, state: "live" }
+
+          context "when the form does not have a live English form document" do
+            context "when the form does not have a live Welsh form document" do
+              it "returns false" do
+                expect(form.can_make_language_live?(language:)).to be false
+              end
+            end
+
+            context "when the form already has a live Welsh form document" do
+              before do
+                create :form_document, :live, form:, language: "cy", content: form.as_form_document
+              end
+
+              it "returns false" do
+                expect(form.can_make_language_live?(language:)).to be false
+              end
+            end
+          end
+
+          context "when the form already has a live English form document" do
+            before do
+              create :form_document, :live, form:, language: "en", content: form.as_form_document
+            end
+
+            it "returns false" do
+              expect(form.can_make_language_live?(language:)).to be false
+            end
+          end
+        end
+      end
+    end
+
+    context "when the language being checked is Welsh" do
+      let(:language) { "cy" }
+
+      context "when the form is draft" do
+        context "when the form does not have all mandatory tasks completed" do
+          let(:form) { create :form }
+
+          it "returns false" do
+            expect(form.can_make_language_live?(language:)).to be false
+          end
+        end
+
+        context "when the form has all mandatory tasks completed" do
+          let(:form) { create :form, :ready_for_live }
+
+          context "when the form does not have a live English form document" do
+            context "when the form does not have a live Welsh form document" do
+              it "returns false" do
+                expect(form.can_make_language_live?(language:)).to be false
+              end
+            end
+
+            context "when the form already has a live Welsh form document" do
+              before do
+                create :form_document, :live, form:, language: "cy", content: form.as_form_document
+              end
+
+              it "returns false" do
+                expect(form.can_make_language_live?(language:)).to be false
+              end
+            end
+          end
+
+          context "when the form already has a live English form document" do
+            before do
+              create :form_document, :live, form:, language: "en", content: form.as_form_document
+            end
+
+            it "returns false" do
+              expect(form.can_make_language_live?(language:)).to be false
+            end
+          end
+        end
+      end
+
+      context "when the form is live" do
+        let(:form) { create :form, :ready_for_live, state: "live" }
+
+        context "when the form does not have a live English form document" do
+          context "when the form does not have a live Welsh form document" do
+            it "returns false" do
+              expect(form.can_make_language_live?(language:)).to be false
+            end
+          end
+
+          context "when the form already has a live Welsh form document" do
+            before do
+              create :form_document, :live, form:, language: "cy", content: form.as_form_document
+            end
+
+            it "returns false" do
+              expect(form.can_make_language_live?(language:)).to be false
+            end
+          end
+        end
+
+        context "when the form already has a live English form document" do
+          before do
+            create :form_document, :live, form:, language: "en", content: form.as_form_document
+          end
+
+          context "when the form does not have a live Welsh form document" do
+            context "when the Welsh task has not been started" do
+              it "returns false" do
+                expect(form.can_make_language_live?(language:)).to be false
+              end
+            end
+
+            context "when the Welsh task is still in progress" do
+              let(:form) { create :form, :ready_for_live, :with_welsh_translation, state: "live", welsh_completed: false }
+
+              it "returns true" do
+                expect(form.can_make_language_live?(language:)).to be false
+              end
+            end
+
+            context "when the Welsh task is complete" do
+              let(:form) { create :form, :ready_for_live, :with_welsh_translation, state: "live" }
+
+              it "returns true" do
+                expect(form.can_make_language_live?(language:)).to be true
+              end
+            end
+          end
+
+          context "when the form already has a live Welsh form document" do
+            before do
+              create :form_document, :live, form:, language: "cy", content: form.as_form_document
+            end
+
+            it "returns false" do
+              expect(form.can_make_language_live?(language:)).to be false
+            end
+          end
+        end
+      end
+    end
+  end
 end

@@ -1,14 +1,14 @@
 require "rails_helper"
 
 describe "forms/make_language_live/confirmation.html.erb" do
-  let(:has_welsh_translation) { false }
-  let(:welsh_completed) { false }
+  let(:can_make_welsh_version_live) { false }
   let(:go_to_make_welsh_live_input) { Forms::GoToMakeWelshLiveInput.new }
-  let(:current_form) { OpenStruct.new(id: 1, name: "Form 1", name_cy: "Ffurflen 1", form_slug: "form-1", has_welsh_translation?: has_welsh_translation, welsh_completed:) }
+  let(:current_form) { build :form, id: 1, name: "Form 1", name_cy: "Ffurflen 1", form_slug: "form-1" }
   let(:language) { "en" }
 
   before do
     assign(:go_to_make_welsh_live_input, go_to_make_welsh_live_input)
+    allow(current_form).to receive(:can_make_language_live?).with(language: "cy").and_return(can_make_welsh_version_live)
     render template: "forms/make_language_live/confirmation", locals: { current_form:, confirmation_page_title: "Your form is live", confirmation_page_body: I18n.t("make_changes_live.confirmation.body_html").html_safe, language: }
   end
 
@@ -36,9 +36,8 @@ describe "forms/make_language_live/confirmation.html.erb" do
       expect(rendered).to have_css("[data-copy-button-text='#{t('make_live.confirmation.copy_english_url_to_clipboard')}']")
     end
 
-    context "when the form has a completed Welsh version" do
-      let(:has_welsh_translation) { true }
-      let(:welsh_completed) { true }
+    context "when the form's Welsh version can be made live" do
+      let(:can_make_welsh_version_live) { true }
 
       it "renders radio buttons for making the draft changes live" do
         expect(rendered).to have_css("legend", text: I18n.t("helpers.legend.forms_go_to_make_welsh_live_input.confirm"))
