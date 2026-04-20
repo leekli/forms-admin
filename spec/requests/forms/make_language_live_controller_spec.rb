@@ -89,8 +89,11 @@ RSpec.describe Forms::MakeLanguageLiveController, type: :request do
           end
 
           it "sends an email to the organisation admins" do
-            pending "not yet implemented"
-            raise
+            post(make_language_live_path(form_id: form.id, language:), params: form_params)
+            expect(ActionMailer::Base.deliveries.count).to eq(1)
+
+            template_id = Settings.govuk_notify.admin_alerts.new_draft_form_made_live_template_id
+            expect(ActionMailer::Base.deliveries.last.govuk_notify_template).to eq(template_id)
           end
         end
 

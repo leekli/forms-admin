@@ -21,6 +21,10 @@ module Forms
       @make_form_live_service = MakeFormLiveService.call(current_form:, current_user:, language: params[:language])
       @make_form_live_service.make_language_live
 
+      if current_form.state_previously_changed?
+        OrgAdminAlertsService.new(form: current_form, current_user:).form_made_live
+      end
+
       redirect_to make_language_live_show_confirmation_path
     end
 
