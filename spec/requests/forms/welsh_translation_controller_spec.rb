@@ -112,6 +112,33 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       end
     end
 
+    context "when 'Yes' is selected and support email does not end in '.gov.uk'" do
+      let(:domain) { "ogd.ewxample" }
+      let(:support_email) { Faker::Internet.email(domain:) }
+
+      let(:form) { create(:form, :ready_for_routing, welsh_completed: false, support_email:) }
+      let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, name_cy: "Gwneud cais am drwydded jyglo", privacy_policy_url_cy: "https://juggling.gov.uk/privacy_policy/cy", support_email_cy: support_email, page_translations_attributes: } } }
+
+      it "returns a 422, re-renders the page with an error, and does not display a success banner" do
+        post(welsh_translation_create_path(id), params:)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response).to render_template(:new)
+        expect(response.body).to include(I18n.t("activemodel.errors.models.forms/welsh_translation_input.attributes.support_email_cy.non_government_email"))
+        expect(flash).to be_empty
+      end
+
+      context "and the current user is signed in with an email address at the same domain" do
+        let(:standard_user) { build :user, :standard, organisation: test_org, email: Faker::Internet.email(domain:) }
+
+        it "redirects to the form task list and displays a success banner including text about being marked complete" do
+          post(welsh_translation_create_path(id), params:)
+          expect(response).to redirect_to(form_path(id))
+          expect(flash[:success]).to eq(I18n.t("banner.success.form.welsh_translation_saved_and_completed"))
+        end
+      end
+    end
+
     context "when the user is not authorized" do
       let(:current_user) { build :user }
 

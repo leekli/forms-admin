@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Forms::WelshTranslationInput, type: :model do
   subject(:welsh_translation_input) { described_class.new(new_input_data) }
 
+  let(:current_user) { build :user }
   let(:form) { build_form }
   let(:page) do
     create :page,
@@ -18,6 +19,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
 
   let(:new_input_data) do
     {
+      current_user:,
       form:,
       mark_complete:,
       name_cy: "New Welsh name",
@@ -193,6 +195,15 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
             it "is invalid" do
               expect(welsh_translation_input).not_to be_valid
               expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to include "Support email cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_email_cy.non_government_email')}"
+            end
+
+            context "when the user has an email address with the same domain" do
+              let(:current_user) { build :user, email: "user@example.com" }
+
+              it "is valid" do
+                expect(welsh_translation_input).to be_valid
+                expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to be_empty
+              end
             end
           end
         end
