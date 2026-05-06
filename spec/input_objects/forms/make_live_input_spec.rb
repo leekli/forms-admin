@@ -6,7 +6,7 @@ RSpec.describe Forms::MakeLiveInput, type: :model do
   let(:user) { build :user }
 
   before do
-    form.set_task_status_service(TaskStatusService.new(form:))
+    form.set_task_status_service(TaskStatusService.new(form:, current_user: user))
   end
 
   describe "validations" do

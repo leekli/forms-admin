@@ -12,7 +12,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
   let(:group) { create(:group, organisation:, status: :active) }
 
   before do
-    form.set_task_status_service(TaskStatusService.new(form:))
+    form.set_task_status_service(TaskStatusService.new(form:, current_user: user))
   end
 
   describe "#new" do

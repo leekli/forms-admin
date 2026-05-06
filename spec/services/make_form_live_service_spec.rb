@@ -7,7 +7,7 @@ describe MakeFormLiveService do
   let(:current_user) { build :user }
 
   before do
-    current_form.set_task_status_service(TaskStatusService.new(form: current_form))
+    current_form.set_task_status_service(TaskStatusService.new(form: current_form, current_user:))
   end
 
   describe "#make_live" do

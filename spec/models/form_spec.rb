@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe Form, type: :model do
   subject(:form) { described_class.new }
 
+  let(:current_user) { build :user }
+
   describe "factory" do
     it "has a valid factory" do
       form = create :form
@@ -37,7 +39,7 @@ RSpec.describe Form, type: :model do
 
     describe "task status traits" do
       before do
-        form.set_task_status_service(TaskStatusService.new(form:))
+        form.set_task_status_service(TaskStatusService.new(form:, current_user:))
       end
 
       describe "ready for live trait" do
@@ -516,7 +518,7 @@ RSpec.describe Form, type: :model do
 
   describe "FormStateMachine" do
     before do
-      form.set_task_status_service(TaskStatusService.new(form: form))
+      form.set_task_status_service(TaskStatusService.new(form:, current_user:))
     end
 
     describe "#make_live!" do
@@ -878,7 +880,7 @@ RSpec.describe Form, type: :model do
 
   describe "#ready_for_live" do
     before do
-      form.set_task_status_service(TaskStatusService.new(form:))
+      form.set_task_status_service(TaskStatusService.new(form:, current_user:))
     end
 
     context "when a form is complete and ready to be made live" do
@@ -920,7 +922,7 @@ RSpec.describe Form, type: :model do
 
   describe "#all_incomplete_tasks" do
     before do
-      form.set_task_status_service(TaskStatusService.new(form: form))
+      form.set_task_status_service(TaskStatusService.new(form:, current_user:))
     end
 
     context "when a form is complete and ready to be made live" do
@@ -1022,10 +1024,10 @@ RSpec.describe Form, type: :model do
 
   describe "#all_task_statuses" do
     let(:group) { create :group }
-    let(:completed_form) { build :form, :live, :with_group, group: }
+    let(:form) { build :form, :live, :with_group, group: }
 
     before do
-      completed_form.set_task_status_service(TaskStatusService.new(form: completed_form))
+      form.set_task_status_service(TaskStatusService.new(form:, current_user:))
     end
 
     it "returns a hash with each of the task statuses" do
@@ -1045,7 +1047,7 @@ RSpec.describe Form, type: :model do
         share_preview_status: :completed,
         make_live_status: :completed,
       }
-      expect(completed_form.all_task_statuses).to eq expected_hash
+      expect(form.all_task_statuses).to eq expected_hash
     end
   end
 
