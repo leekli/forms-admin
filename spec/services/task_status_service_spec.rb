@@ -462,6 +462,31 @@ describe TaskStatusService do
             expect(task_status_service.incomplete_tasks).to match_array(%i[missing_welsh_translations])
           end
         end
+
+        context "when the ignore_missing_welsh argument is `true`" do
+          context "and the form has structural changes require Welsh updates" do
+            let(:form) { create(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: true, group:) }
+
+            before do
+              # Create initial Welsh FormDocument
+              FormDocumentSyncService.new(form).synchronize_live_form
+              # Add new content requiring Welsh translation
+              form.update!(declaration_markdown: "I declare this is correct", share_preview_completed: true)
+            end
+
+            it "returns no missing sections" do
+              expect(task_status_service.incomplete_tasks(ignore_missing_welsh: true)).to be_empty
+            end
+          end
+
+          context "when the optional Welsh task has been started but not completed" do
+            let(:form) { build(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: false, group:) }
+
+            it "returns no missing sections" do
+              expect(task_status_service.incomplete_tasks(ignore_missing_welsh: true)).to be_empty
+            end
+          end
+        end
       end
     end
 
