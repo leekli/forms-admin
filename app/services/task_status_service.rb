@@ -5,10 +5,10 @@ class TaskStatusService
   end
 
   def mandatory_tasks_completed?(ignore_missing_welsh: false)
-    incomplete_tasks(ignore_missing_welsh:).empty?
+    all_incomplete_tasks(ignore_missing_welsh:).empty?
   end
 
-  def incomplete_tasks(ignore_missing_welsh: false)
+  def all_incomplete_tasks(ignore_missing_welsh: false)
     keys_to_skip = [(:missing_welsh_translations if ignore_missing_welsh)]
     values_to_skip = %i[completed optional]
     {
@@ -22,7 +22,7 @@ class TaskStatusService
     }.reject { |k, v| keys_to_skip.include?(k) || values_to_skip.include?(v) }.keys
   end
 
-  def task_statuses
+  def all_task_statuses
     {
       name_status:,
       pages_status:,

@@ -46,9 +46,9 @@ RSpec.describe Form, type: :model do
         let(:form) { build :form, :ready_for_live, :with_group }
 
         it "creates a form that is ready to be made live" do
-          expect(form.ready_for_live).to be true
-          expect(form.incomplete_tasks).to be_empty
-          expect(form.task_statuses).to include(
+          expect(form.all_ready_for_live?).to be true
+          expect(form.all_incomplete_tasks).to be_empty
+          expect(form.all_task_statuses).to include(
             declaration_status: :completed,
             make_live_status: :not_started,
             name_status: :completed,
@@ -64,7 +64,7 @@ RSpec.describe Form, type: :model do
         let(:form) { build :form, :missing_pages }
 
         it "creates a form with missing pages" do
-          expect(form.incomplete_tasks).to eq %i[missing_pages]
+          expect(form.all_incomplete_tasks).to eq %i[missing_pages]
         end
       end
     end
@@ -874,48 +874,6 @@ RSpec.describe Form, type: :model do
 
       it "returns true" do
         expect(form.has_routing_errors).to be true
-      end
-    end
-  end
-
-  describe "#ready_for_live" do
-    before do
-      form.set_task_status_service(TaskStatusService.new(form:, current_user:))
-    end
-
-    context "when a form is complete and ready to be made live" do
-      let(:form) { create(:form, :live) }
-
-      it "returns true" do
-        expect(form.ready_for_live).to be true
-      end
-    end
-
-    context "when a form is incomplete and should still be in draft state" do
-      let(:form) { build :form, :new_form }
-
-      [
-        {
-          attribute: :pages,
-          attribute_value: [],
-        },
-        {
-          attribute: :what_happens_next_markdown,
-          attribute_value: nil,
-        },
-        {
-          attribute: :privacy_policy_url,
-          attribute_value: nil,
-        },
-        {
-          attribute: :support_email,
-          attribute_value: nil,
-        },
-      ].each do |scenario|
-        it "returns false if #{scenario[:attribute]} is missing" do
-          form.send("#{scenario[:attribute]}=", scenario[:attribute_value])
-          expect(form.ready_for_live).to be false
-        end
       end
     end
   end

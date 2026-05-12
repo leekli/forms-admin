@@ -30,7 +30,7 @@ module FormStateMachine
         before :before_make_live
         after :after_make_live
 
-        transitions from: %i[draft live_with_draft archived archived_with_draft], to: :live, guard: :ready_for_live
+        transitions from: %i[draft live_with_draft archived archived_with_draft], to: :live, guard: :all_ready_for_live?
       end
 
       event :make_english_version_live do

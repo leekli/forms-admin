@@ -6,7 +6,7 @@ class FakeForm < ApplicationRecord
   include FormStateMachine
 
   # stub the expected interface
-  def ready_for_live; end
+  def all_ready_for_live?; end
   def can_make_english_version_live?; end
   def can_make_welsh_version_live?; end
   def after_create_draft; end
@@ -44,7 +44,7 @@ RSpec.describe FormStateMachine do
   describe ".make_live" do
     shared_examples "transition to live state" do |form_state|
       before do
-        allow(form).to receive_messages(ready_for_live: true, before_make_live: nil, after_make_live: nil)
+        allow(form).to receive_messages(all_ready_for_live?: true, before_make_live: nil, after_make_live: nil)
       end
 
       it "transitions to live state" do
