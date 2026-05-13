@@ -1375,6 +1375,9 @@ en:
     condition_goto_page_text_with_errors: "[Question not selected]"
     condition_group_description: 'Go to %{goto_page_question_number}, ‘%{goto_page_question_text}’ if the answer is:'
     condition_group_description_end_of_form: 'Go to the end of the form if the answer is:'
+    condition_list_key:
+      one: Question %{question_number}’s route
+      other: Question %{question_number}’s routes
     condition_name: Question %{question_number}’s routes
     edit_exit_page: Edit “%{exit_page_heading}”
     end_of_form: End of form

@@ -195,6 +195,10 @@ RSpec.describe PageListComponent::View, type: :component do
         render_inline(page_list_component)
       end
 
+      it "renders the route summary list key as a singular route" do
+        expect(page).to have_css("dt.govuk-summary-list__key", text: /Question #{first_page.position}’s route$/, exact: true)
+      end
+
       it "renders the condition description" do
         condition_description = "Go to #{third_page.position}, ‘#{third_page.question_text}’ if the answer is:"
         condition_answer_value = "‘#{condition.answer_value}’"
@@ -214,6 +218,10 @@ RSpec.describe PageListComponent::View, type: :component do
 
       before do
         render_inline(page_list_component)
+      end
+
+      it "renders the route summary list key as plural routes" do
+        expect(page).to have_css("dt.govuk-summary-list__key", text: /Question #{first_page.position}’s routes$/, exact: true)
       end
 
       it "renders the condition description" do
