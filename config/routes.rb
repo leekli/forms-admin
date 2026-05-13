@@ -222,6 +222,7 @@ Rails.application.routes.draw do
 
     collection do
       get "confirm-new", to: "groups#confirm_new"
+      post "confirm-new", to: "groups#confirm_new_submit"
     end
 
     member do
