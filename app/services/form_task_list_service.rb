@@ -20,7 +20,7 @@ class FormTaskListService
   def all_sections
     [
       create_form_section(section_number: 1),
-      payment_link_subsection,
+      create_form_optional_subsection,
       how_you_get_completed_forms_section(section_number: 2),
       how_you_get_completed_forms_optional_subsection,
       privacy_and_contact_details_section(section_number: 3),
@@ -61,19 +61,18 @@ private
     ]
   end
 
-  def payment_link_subsection
+  def create_form_optional_subsection
+    rows = [
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_optional_subsection.payment_link"), path: payment_link_path(@form.id), status: @task_statuses[:payment_link_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_optional_subsection.copy_of_answers"), path: copy_of_answers_path(@form.id), status: @task_statuses[:copy_of_answers_status] },
+    ]
+
     {
-      title: I18n.t("forms.task_list.optional_tasks_title", count: 1),
-      rows: payment_link_subsection_tasks,
+      title: I18n.t("forms.task_list.optional_tasks_title", count: rows.count),
+      rows: rows,
       section_number: nil,
       subsection: true,
     }
-  end
-
-  def payment_link_subsection_tasks
-    [
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.payment_link_subsection.payment_link"), path: payment_link_path(@form.id), status: @task_statuses[:payment_link_status] },
-    ]
   end
 
   def how_you_get_completed_forms_section(section_number:)
@@ -251,6 +250,7 @@ private
 
   def remove_optional_statuses(statuses)
     statuses.delete(:payment_link_status)
+    statuses.delete(:copy_of_answers_status)
     statuses.delete(:submission_attachments_status)
     statuses.delete(:batch_submissions_status)
   end

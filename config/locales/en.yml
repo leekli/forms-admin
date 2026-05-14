@@ -507,6 +507,9 @@ en:
         one: Optional task
         other: Optional tasks
     task_list_create:
+      create_form_optional_subsection:
+        copy_of_answers: Give people the option to ask for a copy of their answers
+        payment_link: Add a link to a payment page on GOV.UK Pay
       create_form_section:
         declaration: Add a declaration for people to agree to
         name: Edit the name of your form
@@ -542,8 +545,6 @@ en:
             Only a group admin can make a form live.
 
             <a href="%{group_members_path}">View the members of the group</a> to find a group admin.
-      payment_link_subsection:
-        payment_link: Add a link to a payment page on GOV.UK Pay
       privacy_and_contact_details_section:
         contact_details: Provide contact details for support
         privacy_policy: Provide a link to privacy information for this form
@@ -552,6 +553,9 @@ en:
         add_welsh: Add a Welsh version of your form
         title: Create a Welsh version of your form (optional)
     task_list_edit:
+      create_form_optional_subsection:
+        copy_of_answers: Give people the option to ask for a copy of their answers
+        payment_link: Add a link to a payment page on GOV.UK Pay
       create_form_section:
         declaration: Edit the declaration for people to agree to
         name: Edit the name of your form
@@ -570,8 +574,6 @@ en:
         make_live: Make your changes live
         share_preview: Share a preview of your draft form
         title: Make your changes live
-      payment_link_subsection:
-        payment_link: Add a link to a payment page on GOV.UK Pay
       privacy_and_contact_details_section:
         contact_details: Edit the contact details for support
         privacy_policy: Edit the link to privacy information for this form
