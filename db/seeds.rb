@@ -602,6 +602,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
     share_preview_completed: true,
     send_copy_of_answers: "enabled",
   )
+  copy_of_answers_form.set_task_status_service(TaskStatusService.new(form: multiple_branch_form, current_user: craig))
   copy_of_answers_form.make_live!
 
   # add forms to groups
