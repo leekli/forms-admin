@@ -25,7 +25,7 @@ class Routes::BuildService
     end
   end
 
-  def options_for_page(page)
+  def options_for_goto_page(page, selected = nil)
     next_page = form.next_page_after(page)
 
     return [] unless next_page
@@ -62,7 +62,7 @@ private
         page:,
         answer_value:,
         goto: goto_value_for(condition),
-        goto_options: options_for_page(page),
+        goto_options: options_for_goto_page(page, condition&.goto_page_id),
         label: { text: "Option #{index}: #{answer_value_label}" },
       )
     end
@@ -78,15 +78,19 @@ private
         page_id: page.id,
         page:,
         goto: goto_value_for(condition),
-        goto_options: options_for_page(page),
+        goto_options: options_for_goto_page(page, condition&.goto_page_id),
         label: { text: "Go to", hidden: true },
       ),
     ]
   end
 
+  def option_for_select(page)
+    ["#{page.position}. #{page.question_text}", page.id]
+  end
+
   def all_goto_options
     @all_goto_options ||= begin
-      page_opts = form.pages.map { |p| ["#{p.position}. #{p.question_text}", p.id] }
+      page_opts = form.pages.map { |p| option_for_select(p) }
       page_opts + [END_OF_FORM_OPTION]
     end
   end

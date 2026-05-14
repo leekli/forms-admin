@@ -181,7 +181,7 @@ RSpec.describe Routes::BuildService do
     end
   end
 
-  describe "#options_for_page" do
+  describe "#options_for_goto_page" do
     let(:pages) do
       create_list(:page, 3) do |page, i|
         page.id = 101 + i
@@ -191,11 +191,11 @@ RSpec.describe Routes::BuildService do
     end
 
     it "returns an empty array if the page has no next page" do
-      expect(service.options_for_page(pages.third)).to be_empty
+      expect(service.options_for_goto_page(pages.third)).to be_empty
     end
 
     it "returns a list of all possible goto options" do
-      options = service.options_for_page(pages.first)
+      options = service.options_for_goto_page(pages.first)
 
       expected_other_options = [
         ["3. question 3", pages.third.id],
@@ -207,14 +207,14 @@ RSpec.describe Routes::BuildService do
     end
 
     it "replaces the next page with the default option" do
-      options = service.options_for_page(pages.first)
+      options = service.options_for_goto_page(pages.first)
       default_option = options.find { |opt| opt[1] == Forms::RouteInput::DEFAULT_VALUE }
 
       expect(default_option).to eq(["Go to question 2", Forms::RouteInput::DEFAULT_VALUE])
     end
 
     it "does not include the current page in the options" do
-      options = service.options_for_page(pages.first)
+      options = service.options_for_goto_page(pages.first)
       page_ids = options.map(&:second)
 
       expect(page_ids).not_to include(pages.first.id)
