@@ -387,7 +387,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         it "returns description with 'Check your answers' text" do
-          expected_text = "If “#{pages.first.question_text}” is answered as “#{condition.answer_value}” go to end of form."
+          expected_text = "If “#{pages.first.question_text}” is answered as “#{condition.answer_value}” go to the end of the form."
           expect(page_list_component.condition_description(condition)).to eq(expected_text)
         end
       end
