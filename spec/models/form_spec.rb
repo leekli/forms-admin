@@ -920,7 +920,7 @@ RSpec.describe Form, type: :model do
     it "defaults to disabled" do
       form = build(:form)
       expect(form.send_copy_of_answers).to eq("disabled")
-      expect(form.disabled?).to be true
+      expect(form.send_copy_of_answers_disabled?).to be true
     end
   end
 
