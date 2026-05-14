@@ -742,21 +742,18 @@ en:
         label: Move this group to another organisation
         prompt: Select an organisation
     new:
+      back_link: Back to create a new group
       body_html: |
-        <p>Each form needs to be created in a ‘group’. Once you have a group, you can add other people to create and edit forms in it.</p>
-
-        <p class="govuk-inset-text">When a group is first created it will be a ‘trial’ group. That means you cannot make any forms in the group live. You’ll be able to request for a group to be upgraded to an ‘active’ group if you need to make forms live.</p>
-
-        <p>Give your group a meaningful name that will reflect the forms you’ll create in the group, and make sense to the people that will be added to it. For example:</p>
-
+        <p>Give your group a meaningful name that will reflect the forms you’ll
+        create in the group, and make sense to the people that will be added to
+        it. For example:</p>
         <ul class="govuk-list govuk-list--bullet">
           <li>Licensing forms</li>
           <li>GOV.UK content team</li>
           <li>Juggling service forms</li>
+          <li>Test forms</li>
         </ul>
-
         <p>You can change the name later if you need to.</p>
-      title: Create a new group for forms
     review_upgrade:
       body_html: |
         <p>%{upgrade_requester_name} has asked to upgrade this group to an ‘active’ group.</p>
@@ -1496,6 +1493,7 @@ en:
     mou_signatures: MOUs and agreements
     move_form: Move this form to a different group
     name_settings: Ask for a person’s name
+    new_group: Give your group a name
     new_page: Edit question
     new_secondary_skip: 'Route for any other answer: set questions to skip'
     non_crown_agreement_confirmation: You’ve agreed to the GOV.UK Forms agreement
