@@ -754,8 +754,8 @@ describe StepSummaryTableService do
                                                                     exit_page_heading_cy: nil,
                                                                     exit_page_markdown: nil,
                                                                     exit_page_markdown_cy: nil,
-                                                                    goto_page: "End of form",
-                                                                    goto_page_cy: "End of form",
+                                                                    goto_page: "End of the form",
+                                                                    goto_page_cy: "End of the form",
                                                                     routing_page: "11. Question to be skipped",
                                                                     routing_page_cy: "11. Question to be skipped (Welsh)",
                                                                     secondary_skip: false }]
