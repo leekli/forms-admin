@@ -1013,6 +1013,7 @@ RSpec.describe Form, type: :model do
         confirm_submission_email_status: :completed,
         privacy_policy_status: :completed,
         payment_link_status: :optional,
+        copy_of_answers_status: :optional,
         submission_attachments_status: :optional,
         batch_submissions_status: :optional,
         support_contact_details_status: :completed,
