@@ -141,5 +141,40 @@ describe "routes/show.html.erb" do
         end
       end
     end
+
+    context "when a page is a select from a list question" do
+      let(:pages) do
+        [
+          build_stubbed(:page, :with_selection_settings, id: 101, selection_options:),
+          build_stubbed(:page, id: 102),
+          build_stubbed(:page, id: 103),
+        ]
+      end
+
+      let(:selection_options) do
+        [{ name: "Yes", value: "Yes" }, { name: "No", value: "No" }]
+      end
+
+      it "has inputs for each answer option" do
+        render_page
+
+        expect(rendered).to have_selector(".govuk-summary-list") do |summary_list|
+          rows = summary_list.find_all(".govuk-summary-list__row")
+
+          expect(rows[0]).to have_selector('.govuk-select[name="forms_routes_input[routes_attributes][0][goto]"]')
+          expect(rows[0]).to have_selector('input[name="forms_routes_input[routes_attributes][0][page_id]"][value="101"]', visible: :hidden)
+          expect(rows[0]).to have_selector('input[name="forms_routes_input[routes_attributes][0][answer_value]"][value="Yes"]', visible: :hidden)
+
+          expect(rows[0]).to have_selector('.govuk-select[name="forms_routes_input[routes_attributes][1][goto]"]')
+          expect(rows[0]).to have_selector('input[name="forms_routes_input[routes_attributes][1][page_id]"][value="101"]', visible: :hidden)
+          expect(rows[0]).to have_selector('input[name="forms_routes_input[routes_attributes][1][answer_value]"][value="No"]', visible: :hidden)
+
+          expect(rows[1]).to have_selector('.govuk-select[name="forms_routes_input[routes_attributes][2][goto]"]')
+          expect(rows[1]).to have_selector('input[name="forms_routes_input[routes_attributes][2][page_id]"][value="102"]', visible: :hidden)
+
+          expect(rows[2]).not_to have_selector(".govuk-select")
+        end
+      end
+    end
   end
 end
