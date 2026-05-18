@@ -72,6 +72,11 @@ en:
           attributes:
             agreed:
               accepted: You must agree to the terms of use to continue
+        forms/copy_of_answers_input:
+          attributes:
+            send_copy_of_answers:
+              blank: Sorry, there was a problem. Please try again.
+              inclusion: Sorry, there was a problem. Please try again.
         forms/delete_confirmation_input:
           blank: Select ‘Yes’ to delete the draft
         forms/submission_attachments_input:
@@ -236,6 +241,8 @@ en:
           weekly_enabled: You’ll get a weekly batch of form submissions
         change_name: Your form name has been saved
         copied: Your form has been copied
+        copy_of_answers_disabled: People will not have the option to ask for a copy of their answers
+        copy_of_answers_enabled: People will have the option to ask for a copy of their answers
         declaration_saved: Your declaration has been saved
         declaration_saved_and_completed: Your declaration has been saved and marked as complete
         page_moved: "‘%{question_text}’ has moved %{direction} to number %{question_number}"
@@ -398,6 +405,15 @@ en:
           <p>The CSVs will include each submission’s answers in plain text separated by commas - plus the date and time of submission.</p>
           <p>If you make changes to the form such as adding, moving or deleting a question, the structure of the CSV will change. Forms completed before and after the change will be split into separate CSV files.</p>
           <p>You’ll continue to receive individual completed form submissions in the usual way. If your form has any file upload questions, the uploaded files will only be attached to the individual submissions.</p>
+    copy_of_answers:
+      new:
+        body_html: |
+          <p>You can give people who complete your form the option to get an email with a copy of their answers. We’ll ask if they want this after they’ve answered all the questions in your form. People only get a copy of their answers if they ask for it: you cannot make it mandatory.</p>
+          <p>We use GOV.UK One Login to make sure answers are not sent to the wrong email address. If the person filling in the form does not have a GOV.UK One Login already, they’ll be asked to create one before submitting the form.</p>
+          <h2 class="govuk-heading-m">Why you might not want to give people the option to get a copy of their answers</h2>
+          <p>If someone already has a GOV.UK One Login, it will usually be linked to their personal email address. So there’s a chance the answers will be sent to their personal email address, even if they’re filling in the form in a work capacity.</p>
+          <p>If they need to create a new GOV.UK One Login, this adds an extra step - meaning there’s a chance they might not come back and complete the form.</p>
+          <p>So only allow this option if there’s a real need for people to be able to request a copy of their answers.</p>
     delete_confirmation:
       delete:
         hint_for_archived_draft: Deleting this draft will not remove the archived form.
@@ -423,6 +439,9 @@ en:
         cy: Previous Welsh form URL
         en: Previous English form URL
       contact_details: Your form’s contact details for support
+      copy_of_answers:
+        enabled: You’ve opted to let people ask to be sent a copy of their answers after they’ve filled in the form.
+        title: People can ask for a copy of their answers
       declaration: Declaration
       declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
       draft_create: Create a draft to edit
@@ -491,6 +510,9 @@ en:
         one: Optional task
         other: Optional tasks
     task_list_create:
+      create_form_optional_subsection:
+        copy_of_answers: Give people the option to ask for a copy of their answers
+        payment_link: Add a link to a payment page on GOV.UK Pay
       create_form_section:
         declaration: Add a declaration for people to agree to
         name: Edit the name of your form
@@ -526,8 +548,6 @@ en:
             Only a group admin can make a form live.
 
             <a href="%{group_members_path}">View the members of the group</a> to find a group admin.
-      payment_link_subsection:
-        payment_link: Add a link to a payment page on GOV.UK Pay
       privacy_and_contact_details_section:
         contact_details: Provide contact details for support
         privacy_policy: Provide a link to privacy information for this form
@@ -536,6 +556,9 @@ en:
         add_welsh: Add a Welsh version of your form
         title: Create a Welsh version of your form (optional)
     task_list_edit:
+      create_form_optional_subsection:
+        copy_of_answers: Give people the option to ask for a copy of their answers
+        payment_link: Add a link to a payment page on GOV.UK Pay
       create_form_section:
         declaration: Edit the declaration for people to agree to
         name: Edit the name of your form
@@ -554,8 +577,6 @@ en:
         make_live: Make your changes live
         share_preview: Share a preview of your draft form
         title: Make your changes live
-      payment_link_subsection:
-        payment_link: Add a link to a payment page on GOV.UK Pay
       privacy_and_contact_details_section:
         contact_details: Edit the contact details for support
         privacy_policy: Edit the link to privacy information for this form
@@ -951,6 +972,9 @@ en:
           weekly: Get a weekly CSV of submissions
       forms_copy_input:
         name: What is the name of your form?
+      forms_copy_of_answers_input:
+        send_copy_of_answers_options:
+          enabled: Give people the option to get a copy of their answers by email - I’m ok with the risk
       forms_make_changes_live:
         confirm: Are you sure you want to make your draft live?
       forms_make_language_live_input:
@@ -1119,6 +1143,8 @@ en:
         agreed: Do you agree to these terms?
       forms_batch_submissions_input:
         batch_frequencies: Do you want to get a daily or weekly CSV of submissions to this form?
+      forms_copy_of_answers_input:
+        send_copy_of_answers: Do you want to give people the option to get a copy of their answers by email?
       forms_submission_attachments_input:
         submission_format: Do you want to get a CSV or JSON file of each completed form?
       forms_submission_type_input:
@@ -1492,6 +1518,7 @@ en:
     confirm_email_success: Email address confirmed
     contact_details: Provide contact details for support
     copy: What is the name of your form?
+    copy_of_answers: Give people the option to get a copy of their answers by email
     date_settings: Are you asking for someone’s date of birth?
     declaration: Add a declaration for people to agree to
     delete_secondary_skip: Are you sure you want to delete the route for any other answer?
@@ -2163,6 +2190,8 @@ en:
         name: Super admin
     save: Save
   what_happens_next:
+    confirmation_email: The optional email confirmation will also include the contact details you provide for the form, and the date and time of submission. It will not include a copy of their answers.
+    confirmation_email_send_filler_answers_enabled: The optional email confirmation will also include the contact details you provide for the form, and the date and time of submission. If you’ve given people the option to ask for a copy of their answers - and the person filling in the form requests this - their answers will be added to the confirmation email.
     example:
       body: We’ll send you an email to let you know the outcome. You’ll usually get a response within 10 working days.
       heading: Example
@@ -2174,10 +2203,5 @@ en:
         <li>shown to people when they’ve completed and submitted a form</li>
         <li>included in an email confirmation, if they choose to receive this</li>
       </ul>
-
-      <p>
-        The optional email confirmation will also include the contact details you provide for the form,
-        and the date and time of submission. It will not include a copy of their answers.
-      </p>
     instructions: Add some information to tell people what will happen after they’ve submitted their form, and when - so they know what to expect.
     reference_numbers: GOV.UK Forms adds a unique reference number to the confirmation page and optional email confirmation. This will also be included in submission emails sent to your processing email address.

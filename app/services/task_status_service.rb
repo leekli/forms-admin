@@ -29,6 +29,7 @@ class TaskStatusService
       declaration_status:,
       what_happens_next_status:,
       payment_link_status:,
+      copy_of_answers_status:,
       privacy_policy_status:,
       support_contact_details_status:,
       submission_attachments_status:,
@@ -82,6 +83,12 @@ private
 
   def payment_link_status
     return :completed if @form.payment_url.present?
+
+    :optional
+  end
+
+  def copy_of_answers_status
+    return :completed if @form.send_copy_of_answers_enabled?
 
     :optional
   end

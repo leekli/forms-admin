@@ -37,6 +37,7 @@ describe FormTaskListService do
         support_contact_details_status: :not_started,
         what_happens_next_status: :completed,
         payment_link_status: :optional,
+        copy_of_answers_status: :optional,
         submission_attachments_status: :optional,
         batch_submissions_status: :optional,
         share_preview_status: :completed,
@@ -142,7 +143,7 @@ describe FormTaskListService do
       end
     end
 
-    describe "payment link subsection tasks" do
+    describe "create form optional subsection tasks" do
       let(:section) do
         all_sections[1]
       end
@@ -152,6 +153,19 @@ describe FormTaskListService do
       it "has link to payment link settings" do
         expect(section_rows.first[:task_name]).to eq "Add a link to a payment page on GOV.UK Pay"
         expect(section_rows.first[:path]).to eq "/forms/#{form.id}/payment-link"
+      end
+
+      context "when the send_filler_answers feature is enabled", :feature_send_filler_answers do
+        it "has link to copy of answers settings" do
+          expect(section_rows[1][:task_name]).to eq "Give people the option to ask for a copy of their answers"
+          expect(section_rows[1][:path]).to eq "/forms/#{form.id}/copy-of-answers"
+        end
+      end
+
+      context "when the send_filler_answers feature is disabled", feature_send_filler_answers: false do
+        it "does not have link to copy of answers settings" do
+          expect(section_rows.count).to eq 1
+        end
       end
     end
 
@@ -497,7 +511,7 @@ describe FormTaskListService do
         section_titles = all_sections.map { |section| section[:title] }
         expect(section_titles).to contain_exactly(
           I18n.t("forms.task_list_edit.create_form_section.title"),
-          I18n.t("forms.task_list.optional_tasks_title.one"),
+          I18n.t("forms.task_list.optional_tasks_title.other"),
           I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.title"),
           I18n.t("forms.task_list.optional_tasks_title.other"),
           I18n.t("forms.task_list_edit.privacy_and_contact_details_section.title"),
@@ -513,7 +527,8 @@ describe FormTaskListService do
           I18n.t("forms.task_list_edit.create_form_section.questions"),
           I18n.t("forms.task_list_edit.create_form_section.declaration"),
           I18n.t("forms.task_list_edit.create_form_section.what_happens_next"),
-          I18n.t("forms.task_list_edit.payment_link_subsection.payment_link"),
+          I18n.t("forms.task_list_edit.create_form_optional_subsection.payment_link"),
+          I18n.t("forms.task_list_edit.create_form_optional_subsection.copy_of_answers"),
           I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.email"),
           I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.confirm_email"),
           I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.optional_subsection.submission_attachments"),

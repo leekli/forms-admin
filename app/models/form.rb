@@ -37,7 +37,7 @@ class Form < ApplicationRecord
   enum :send_copy_of_answers, {
     disabled: "disabled",
     enabled: "enabled",
-  }
+  }, prefix: :send_copy_of_answers
 
   # ActiveRecord doesn't support enums with arrays
   # enum :submission_format, {

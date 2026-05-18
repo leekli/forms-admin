@@ -27,4 +27,16 @@ describe "forms/what_happens_next/new.html.erb" do
   it "contains text about reference numbers" do
     expect(rendered).to have_text(I18n.t("what_happens_next.reference_numbers"))
   end
+
+  context "when send_filler_answers feature flag is enabled", :feature_send_filler_answers do
+    it "has content saying that answers might be included in the confirmation email" do
+      expect(rendered).to have_text(I18n.t("what_happens_next.confirmation_email_send_filler_answers_enabled"))
+    end
+  end
+
+  context "when send_filler_answers feature flag is disabled", feature_send_filler_answers: false do
+    it "has content saying answers will not be included in the confirmation email" do
+      expect(rendered).to have_text(I18n.t("what_happens_next.confirmation_email"))
+    end
+  end
 end

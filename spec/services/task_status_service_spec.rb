@@ -114,6 +114,24 @@ describe TaskStatusService do
       end
     end
 
+    describe "copy of answers status" do
+      context "with a new form" do
+        let(:form) { build(:form, :new_form, :with_group, group:) }
+
+        it "returns the correct default value" do
+          expect(task_status_service.all_task_statuses[:copy_of_answers_status]).to eq :optional
+        end
+      end
+
+      context "with a form with copy of answers enabled" do
+        let(:form) { build(:form, :with_group, send_copy_of_answers: "enabled", group:) }
+
+        it "returns the completed status" do
+          expect(task_status_service.all_task_statuses[:copy_of_answers_status]).to eq :completed
+        end
+      end
+    end
+
     describe "privacy policy status" do
       context "with a new form" do
         let(:form) { build(:form, :new_form, :with_group, group:) }
@@ -509,6 +527,7 @@ describe TaskStatusService do
         declaration_status: :completed,
         what_happens_next_status: :completed,
         payment_link_status: :optional,
+        copy_of_answers_status: :optional,
         privacy_policy_status: :completed,
         support_contact_details_status: :completed,
         welsh_language_status: :optional,
