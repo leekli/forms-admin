@@ -563,5 +563,26 @@ RSpec.describe PageListComponent::View, type: :component do
       result = page_list_component.answer_value_groups(pages.first)
       expect(result).to eq expected
     end
+
+    context "when given a different order of selection options" do
+      let(:selection_options) do
+        [
+          { value: "Option 3" },
+          { value: "Option 2" },
+          { value: "Option 1" },
+        ]
+      end
+
+      it "returns the conditions in the same order" do
+        expected = [
+          [103, [conditions.second, conditions.first]],
+          [104, [conditions.third]],
+          [nil, [conditions.fourth]],
+        ]
+
+        result = page_list_component.answer_value_groups(pages.first)
+        expect(result).to eq expected
+      end
+    end
   end
 end
