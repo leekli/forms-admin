@@ -134,7 +134,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
 
   Membership.create! user: default_user, group: end_to_end_group, added_by: default_user, role: :group_admin
 
-  submission_email = ENV["EMAIL"] || `git config --get user.email`.strip
+  submission_email = ENV["EMAIL"].presence || `git config --get user.email`.strip.presence || "example@example.com"
 
   all_question_types_form = Form.create!(
     name: "All question types form",
