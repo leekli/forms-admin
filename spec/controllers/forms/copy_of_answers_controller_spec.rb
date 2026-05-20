@@ -94,9 +94,9 @@ RSpec.describe Forms::CopyOfAnswersController, :feature_send_filler_answers, typ
     context "when the send_copy_of_answers value is invalid" do
       let(:send_copy_of_answers) { "invalid_value" }
 
-      it "renders the new template with unprocessable entity status" do
+      it "renders the new template with unprocessable content status" do
         post(copy_of_answers_create_path(form_id: form.id), params:)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response).to have_rendered :new
         expect(response.body).to include("Sorry, there was a problem. Please try again.")
       end
