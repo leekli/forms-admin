@@ -236,7 +236,7 @@ private
   end
 
   def format_answer_value(answer_value)
-    answer_value = I18n.t("page_conditions.none_of_the_above") if answer_value == "none_of_the_above"
+    answer_value = I18n.t("page_conditions.none_of_the_above") if answer_value == Condition::NONE_OF_THE_ABOVE
     ActionController::Base.helpers.sanitize(answer_value)
   end
 
@@ -419,7 +419,7 @@ private
   def welsh_answer_value(welsh_condition)
     return nil if welsh_condition.answer_value.blank?
 
-    return I18n.t("step_summary_card.selection_type.none_of_the_above.cy") if welsh_condition.answer_value == "none_of_the_above"
+    return I18n.t("step_summary_card.selection_type.none_of_the_above.cy") if welsh_condition.answer_value == Condition::NONE_OF_THE_ABOVE
 
     @welsh_steps.find { |step| step.id == welsh_condition.check_page_id }.answer_settings.selection_options.find { |option| option.value == welsh_condition.answer_value }.name
   end
@@ -427,7 +427,7 @@ private
   def welsh_answer_value2(welsh_condition)
     return nil if welsh_condition.answer_value.blank?
 
-    return I18n.t("step_summary_card.selection_type.none_of_the_above.cy") if welsh_condition.answer_value == "none_of_the_above"
+    return I18n.t("step_summary_card.selection_type.none_of_the_above.cy") if welsh_condition.answer_value == Condition::NONE_OF_THE_ABOVE
 
     @welsh_steps.find { |step| step.id == welsh_condition.routing_page_id }.answer_settings.selection_options.find { |option| option.value == welsh_condition.answer_value }.name
   end
