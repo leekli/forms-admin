@@ -80,7 +80,7 @@ RSpec.describe Forms::MakeLanguageLiveController, type: :request do
             expect {
               post(make_language_live_path(form_id: form.id, language:), params: form_params)
             }.to change { FormDocument.where(language:).count }.by(1)
-            .and change { form.reload.state }.to("live")
+            .and change { form.reload.state }.to("live_with_draft")
           end
 
           it "sets the English FormDocument's live_at time to be equal to the form's updated_at time" do
@@ -127,7 +127,7 @@ RSpec.describe Forms::MakeLanguageLiveController, type: :request do
             expect {
               post(make_language_live_path(form_id: form.id, language:), params: form_params)
             }.to change { FormDocument.where(language:).count }.by(1)
-            .and change { form.reload.state }.to("live")
+            .and change { form.reload.state }.to("live_with_draft")
           end
         end
       end

@@ -64,7 +64,7 @@ describe MakeFormLiveService do
         it "makes the English form live" do
           expect {
             make_form_live_service.make_language_live
-          }.to change(current_form, :state).to("live")
+          }.to change(current_form, :state).to("live_with_draft")
           .and change(FormDocument.where(form: current_form, tag: "live", language: "en"), :count).by(1)
           .and not_change(FormDocument.where(form: current_form, tag: "live", language: "cy"), :count)
         end
@@ -80,7 +80,7 @@ describe MakeFormLiveService do
       let(:language) { "cy" }
 
       context "when the form has a live English version" do
-        let(:current_form) { create :form, :ready_for_live, :with_welsh_translation}
+        let(:current_form) { create :form, :ready_for_live, :with_welsh_translation }
 
         before do
           current_form.make_english_version_live!
