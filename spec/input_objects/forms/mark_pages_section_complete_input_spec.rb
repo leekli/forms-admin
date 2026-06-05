@@ -6,11 +6,11 @@ RSpec.describe Forms::MarkPagesSectionCompleteInput, type: :model do
   let(:mark_complete) { "true" }
 
   describe "validations" do
-    context "when form has routing validation errors" do
+    context "when form has routing validation errors", feature_multiple_branches: false do
       let(:form) { create :form, :ready_for_routing }
 
       before do
-        create :condition, routing_page_id: form.pages.first.id, check_page_id: form.pages.first.id, goto_page_id: form.pages.third.id, answer_value: "Doesn't exist"
+        create :condition, routing_page_id: form.pages.first.id, check_page_id: form.pages.first.id, goto_page_id: form.pages.second.id, answer_value: "Option 1"
         form.reload
       end
 
@@ -33,7 +33,7 @@ RSpec.describe Forms::MarkPagesSectionCompleteInput, type: :model do
       end
     end
 
-    context "when form has routing validation errors that can be fixed by normalisation" do
+    context "when form has routing validation errors that can be fixed by normalisation", :feature_multiple_branches do
       let(:form) { create :form, :ready_for_routing }
 
       before do
