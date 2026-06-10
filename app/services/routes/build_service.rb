@@ -45,7 +45,7 @@ class Routes::BuildService
       if drop
         if value == next_page_id
           drop = false
-          ["Go to question #{page.position.next}", Forms::RouteInput::DEFAULT_VALUE]
+          ["#{page.position.next}. #{next_page.question_text}", Forms::RouteInput::DEFAULT_VALUE]
         elsif selected && value == selected
           option
         end
@@ -76,7 +76,7 @@ private
         answer_value:,
         goto: goto_value_for(condition),
         goto_options: options_for_goto_page(page, condition&.goto_page_id),
-        label: { text: "Option #{index}: #{answer_value_label}" },
+        label: { text: "If option #{index} (#{answer_value_label}), go to:" },
       )
     end
   end
@@ -92,7 +92,7 @@ private
         page:,
         goto: goto_value_for(condition),
         goto_options: options_for_goto_page(page, condition&.goto_page_id),
-        label: { text: "Go to", hidden: true },
+        label: { text: "After question #{page.position}, go to:" },
       ),
     ]
   end
