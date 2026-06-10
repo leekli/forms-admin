@@ -5,6 +5,10 @@ class Forms::RoutesInput < BaseInput
     page.answer_settings["selection_options"].length > 10
   end
 
+  def self.route_with_selection_options?(page)
+    page.answer_type == "selection" && page.answer_settings.only_one_option == "true" && !Forms::RoutesInput.too_many_selection_options?(page)
+  end
+
   def initialize(attributes = {})
     @form = attributes.delete(:form)
     super
