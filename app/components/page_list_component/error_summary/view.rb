@@ -48,15 +48,28 @@ module PageListComponent
       end
 
       def errors_for_summary
-        @form.conditions.map { |condition|
-          condition.validation_errors.map do |error|
-            error_object(
-              error_name: error.name,
-              page: condition.check_page,
-              condition: condition,
+        if FeatureService.new(group: @form.group).enabled?(:multiple_branches)
+          @form.pages.map { |page|
+            error_message = self.class.multiple_branch_error_message(page)
+
+            next if error_message.blank?
+
+            OpenStruct.new(
+              message: error_message,
+              link: "##{self.class.page_error_id(page)}",
             )
-          end
-        }.flatten
+          }.compact
+        else
+          @form.conditions.map { |condition|
+            condition.validation_errors.map do |error|
+              error_object(
+                error_name: error.name,
+                page: condition.check_page,
+                condition: condition,
+              )
+            end
+          }.flatten
+        end
       end
     end
   end

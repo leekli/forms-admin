@@ -5,7 +5,7 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
   let(:pages) { form.reload.pages }
   let(:error_summary_component) { described_class.new(form) }
 
-  describe "rendering component" do
+  describe "rendering component", feature_multiple_branches: false do
     context "when there are no pages" do
       it "is blank" do
         render_inline(error_summary_component)
@@ -138,11 +138,34 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
     end
 
     describe "#errors_for_summary" do
-      it "returns all of the routing errors for a form with their respective positions and links" do
-        expect(error_summary_component.errors_for_summary).to eq [
-          OpenStruct.new(message: I18n.t("errors.page_conditions.answer_value_doesnt_exist", question_number: pages.first.position, route_number: 1), link: "#condition_#{condition_with_answer_value_missing.id}"),
-          OpenStruct.new(message: I18n.t("errors.page_conditions.goto_page_doesnt_exist", question_number: pages.second.position, route_number: 1), link: "#condition_#{condition_with_goto_page_missing.id}"),
-        ]
+      context "when the multiple_branches feature is disabled", feature_multiple_branches: false do
+        it "returns all of the routing errors for a form with their respective positions and links" do
+          expect(error_summary_component.errors_for_summary).to eq [
+            OpenStruct.new(message: I18n.t("errors.page_conditions.answer_value_doesnt_exist", question_number: pages.first.position, route_number: 1), link: "#condition_#{condition_with_answer_value_missing.id}"),
+            OpenStruct.new(message: I18n.t("errors.page_conditions.goto_page_doesnt_exist", question_number: pages.second.position, route_number: 1), link: "#condition_#{condition_with_goto_page_missing.id}"),
+          ]
+        end
+      end
+
+      context "when the multiple_branches feature is enabled", :feature_multiple_branches do
+        it "returns an empty array" do
+          expect(error_summary_component.errors_for_summary).to eq []
+        end
+
+        context "when there is a backward route" do
+          let(:expected_page_field_id) { "page-#{form.pages.second.id}" }
+
+          before do
+            create :condition, routing_page_id: form.pages.second.id, check_page_id: form.pages.second.id, goto_page_id: form.pages.first.id
+            form.pages.second.reload
+          end
+
+          it "returns only the backward route error" do
+            expect(error_summary_component.errors_for_summary).to eq [
+              OpenStruct.new(message: "A route from question 2 is going to a previous question - edit this route", link: "##{expected_page_field_id}"),
+            ]
+          end
+        end
       end
     end
   end
