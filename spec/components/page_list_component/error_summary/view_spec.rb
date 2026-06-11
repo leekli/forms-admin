@@ -146,4 +146,50 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
       end
     end
   end
+
+  describe "multiple branch errors" do
+    let(:form) { create :form, :ready_for_routing }
+
+    describe "multiple_branch_error_message" do
+      it "returns nil when the page has no errors" do
+        expect(described_class.multiple_branch_error_message(form.pages.first)).to be_nil
+      end
+
+      context "when the page is a generic page with a backward route" do
+        before do
+          create :condition, routing_page_id: form.pages.second.id, check_page_id: form.pages.second.id, goto_page_id: form.pages.first.id
+          form.pages.second.reload
+        end
+
+        it "returns the correct error message" do
+          expect(described_class.multiple_branch_error_message(form.pages.second)).to eq "A route from question 2 is going to a previous question - edit this route"
+        end
+      end
+
+      context "when the page is a selection page with a single backward route" do
+        before do
+          form.pages << (create :page, :with_selection_settings, form: form, position: 2)
+          create :condition, routing_page_id: form.pages.last.id, check_page_id: form.pages.last.id, goto_page_id: form.pages.first.id, answer_value: "Option 1"
+          form.pages.last.reload
+        end
+
+        it "returns the correct error message" do
+          expect(described_class.multiple_branch_error_message(form.pages.last)).to eq "A route from question 2 is going to a previous question - edit this route"
+        end
+      end
+
+      context "when the page is a selection page with multiple backward routes" do
+        before do
+          form.pages << (create :page, :with_selection_settings, form: form, position: 2)
+          create :condition, routing_page_id: form.pages.last.id, check_page_id: form.pages.last.id, goto_page_id: form.pages.first.id, answer_value: "Option 1"
+          create :condition, routing_page_id: form.pages.last.id, check_page_id: form.pages.last.id, goto_page_id: form.pages.first.id, answer_value: "Option 2"
+          form.pages.last.reload
+        end
+
+        it "returns the correct error message" do
+          expect(described_class.multiple_branch_error_message(form.pages.last)).to eq "Routes from question 2 are going to a previous question - edit this question’s routes"
+        end
+      end
+    end
+  end
 end

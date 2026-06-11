@@ -368,6 +368,11 @@ en:
     routes:
       cannot_route_backwards_from_generic_page: The route from question %{question_number} cannot go to a previous question - edit this route
       cannot_route_backwards_from_selection_page: The route from question %{question_number}, option %{option_number}, cannot go to a previous question - edit this route
+      page_list:
+        cannot_route_backwards_from_generic_page: The route from question %{question_number} cannot go to a previous question - edit this route
+        cannot_route_backwards_from_selection_page:
+          one: A route from question %{question_number} is going to a previous question - edit this route
+          other: Routes from question %{question_number} are going to a previous question - edit this question’s routes
   exit_page:
     no_content_added_html: "<p>No content added</p>"
   feedback_link:
