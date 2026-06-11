@@ -367,7 +367,7 @@ en:
     prefix: 'Error:'
     routes:
       cannot_route_backwards_from_generic_page: The route from question %{question_number} cannot go to a previous question - edit this route
-      cannot_route_backwards_from_selection_page: The route from question %{question_number}, option %{option_number}, cannot go to a previous question - edit this route
+      cannot_route_backwards_from_selection_page: The route from question %{question_number}, option %{option_number} cannot go to a previous question - edit this route
       page_list:
         cannot_route_backwards_from_generic_page: The route from question %{question_number} cannot go to a previous question - edit this route
         cannot_route_backwards_from_selection_page:

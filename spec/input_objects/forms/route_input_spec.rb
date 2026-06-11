@@ -129,7 +129,7 @@ RSpec.describe Forms::RouteInput, type: :model do
 
         it "adds the correct error" do
           expect(route_input).to be_invalid
-          expect(route_input.errors[:goto]).to eq(["The route from question 2, option 1, cannot go to a previous question - edit this route"])
+          expect(route_input.errors[:goto]).to eq(["The route from question 2, option 1 cannot go to a previous question - edit this route"])
         end
       end
 
