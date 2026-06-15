@@ -57,7 +57,7 @@ class Routes::BuildService
 private
 
   def build_routes_for_selection_page(page, conditions_by_key)
-    options = page.answer_settings&.selection_options || []
+    options = page.answer_settings&.selection_options&.dup || []
 
     options << NONE_OF_THE_ABOVE_OPTION if page.is_optional
 
