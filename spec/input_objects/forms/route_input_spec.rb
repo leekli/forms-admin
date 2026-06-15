@@ -12,7 +12,7 @@ RSpec.describe Forms::RouteInput, type: :model do
   let(:attributes) do
     {
       id: 1,
-      page_id: 2,
+      page_id: page.id,
       goto: goto_page.id,
       answer_value: "Yes",
       page: page,
@@ -27,15 +27,10 @@ RSpec.describe Forms::RouteInput, type: :model do
   describe "attributes" do
     it "can be initialized with a hash of attributes" do
       expect(route_input.id).to eq(1)
-      expect(route_input.page_id).to eq(2)
+      expect(route_input.page_id).to eq(page.id)
       expect(route_input.goto).to eq(goto_page.id)
       expect(route_input.answer_value).to eq("Yes")
       expect(route_input.page).to eq(page)
-    end
-
-    it "allows access to other accessors like label" do
-      route_input.label = "Go to next page"
-      expect(route_input.label).to eq("Go to next page")
     end
   end
 
@@ -101,6 +96,43 @@ RSpec.describe Forms::RouteInput, type: :model do
       expect(route_input.condition_attributes).to eq(
         { goto_page_id: 123, skip_to_end: false, check_page_id: page.id },
       )
+    end
+  end
+
+  describe "#label" do
+    context "when the route is to the next page" do
+      it "returns the correct label" do
+        expect(route_input.label).to eq({ text: "After question 1, go to:" })
+      end
+    end
+
+    context "when the route is for a generic page" do
+      let(:middle_page) { build_stubbed(:page, position: 2) }
+      let(:goto_page) { build_stubbed(:page, position: 3) }
+
+      it "sets the label correctly for a generic page" do
+        expect(route_input.label).to eq({ text: "After question 1, go to:" })
+      end
+    end
+
+    context "when the route is for a selection page" do
+      let(:page) { build_stubbed(:page, :with_selection_settings, position: 1) }
+      let(:goto_page) { build_stubbed(:page, position: 2) }
+      let(:attributes) { super().merge(answer_value: "Option 1") }
+
+      it "sets the label correctly for a selection page" do
+        expect(route_input.label).to eq({ text: "If option 1 (Option 1), go to:" })
+      end
+    end
+
+    context "when the route is for a selection page with a none of the above option" do
+      let(:page) { build_stubbed(:page, :with_selection_settings, position: 1) }
+      let(:goto_page) { build_stubbed(:page, position: 2) }
+      let(:attributes) { super().merge(answer_value: Condition::NONE_OF_THE_ABOVE) }
+
+      it "sets the label correctly for a selection page with a none of the above option" do
+        expect(route_input.label).to eq({ text: "If option 3 (None of the above), go to:" })
+      end
     end
   end
 

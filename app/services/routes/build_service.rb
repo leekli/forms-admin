@@ -57,13 +57,12 @@ class Routes::BuildService
 private
 
   def build_routes_for_selection_page(page, conditions_by_key)
-    options = page.answer_settings&.selection_options || []
+    options = page.answer_settings&.selection_options&.dup || []
 
     options << NONE_OF_THE_ABOVE_OPTION if page.is_optional
 
-    options.map.with_index(1) do |option, index|
+    options.map do |option|
       answer_value = option["value"]
-      answer_value_label = answer_value == NONE_OF_THE_ABOVE_OPTION[:value] ? I18n.t("page_conditions.none_of_the_above") : option["name"]
       key = [page.id, answer_value]
       condition = conditions_by_key[key]
 
@@ -75,7 +74,6 @@ private
         goto: goto_value_for(condition),
         goto_page: condition&.goto_page,
         goto_options: options_for_goto_page(page, condition&.goto_page_id),
-        label: { text: "If option #{index} (#{answer_value_label}), go to:" },
       )
     end
   end
@@ -92,7 +90,6 @@ private
         goto: goto_value_for(condition),
         goto_page: condition&.goto_page,
         goto_options: options_for_goto_page(page, condition&.goto_page_id),
-        label: { text: "After question #{page.position}, go to:" },
       ),
     ]
   end

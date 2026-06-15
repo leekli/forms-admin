@@ -36,11 +36,6 @@ RSpec.describe Routes::BuildService do
           expect(route_for_page1.goto).to eq(Forms::RouteInput::DEFAULT_VALUE)
         end
 
-        it "sets the label correctly for a generic page" do
-          route_for_page1 = service.build_routes.first
-          expect(route_for_page1.label).to eq({ text: "After question #{pages.first.position}, go to:" })
-        end
-
         context "when a condition exists for the generic page" do
           let!(:conditions) do
             [
@@ -109,18 +104,6 @@ RSpec.describe Routes::BuildService do
 
           expect(route_for_yes).not_to be_nil
           expect(route_for_no).not_to be_nil
-        end
-
-        it "sets the correct goto value and label for each option route" do
-          routes_for_page1 = service.build_routes.select { |r| r.page_id == pages.first.id }
-          route_for_yes = routes_for_page1.find { |r| r.answer_value == "Yes" }
-          route_for_no = routes_for_page1.find { |r| r.answer_value == "No" }
-
-          expect(route_for_yes.goto).to eq(Forms::RouteInput::DEFAULT_VALUE)
-          expect(route_for_yes.label).to eq({ text: "If option 1 (Yes), go to:" })
-
-          expect(route_for_no.goto).to eq(Forms::RouteInput::DEFAULT_VALUE)
-          expect(route_for_no.label).to eq({ text: "If option 2 (No), go to:" })
         end
 
         context "when the selection page has more than 10 options" do
