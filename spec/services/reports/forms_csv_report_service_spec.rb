@@ -76,6 +76,7 @@ RSpec.describe Reports::FormsCsvReportService do
         "csv json",
         "true",
         "true",
+        "false",
       )
     end
   end
