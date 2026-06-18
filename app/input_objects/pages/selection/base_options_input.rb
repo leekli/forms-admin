@@ -35,8 +35,6 @@ class Pages::Selection::BaseOptionsInput < BaseInput
     only_one_option? ? MAXIMUM_CHOOSE_ONLY_ONE_OPTION : MAXIMUM_CHOOSE_MORE_THAN_ONE_OPTION
   end
 
-private
-
   def selected_none_of_the_above_option(draft_question)
     return nil if draft_question.is_optional.nil?
     return "no" unless draft_question.is_optional
@@ -44,6 +42,8 @@ private
 
     "yes"
   end
+
+private
 
   def maximum_error_type
     only_one_option? ? :maximum_choose_only_one_option : :maximum_choose_more_than_one_option
