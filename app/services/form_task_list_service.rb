@@ -224,9 +224,12 @@ private
   def make_only_english_live_task
     status = @task_statuses[:make_only_english_live_status]
     can_make_form_live = status == :not_started
+    english_changes_to_make_live = @form.is_live? && @form.changed_from_live_version?(language: "en")
+
+    task_name = english_changes_to_make_live ? I18n.t("forms.task_list_edit.make_form_live_section.make_english_form_live") : I18n.t("forms.task_list_create.make_form_live_section.make_english_form_live")
 
     {
-      task_name: I18n.t("forms.task_list_create.make_form_live_section.make_english_form_live"),
+      task_name:,
       path: can_make_form_live ? make_language_live_path(@form.id, language: "en") : "",
       status:,
       active: can_make_form_live,

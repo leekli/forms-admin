@@ -590,6 +590,7 @@ en:
           submission_attachments: Get a CSV or JSON file of each completed form
         title: Change how you get completed forms
       make_form_live_section:
+        make_english_form_live: Make changes to your English form live
         make_live: Make your changes live
         share_preview: Share a preview of your draft form
         title: Make your changes live
@@ -1237,6 +1238,10 @@ en:
           <p>The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UK publishing team to publish links to your form on GOV.UK so people can find it.</p>
           <p>Completed forms will be sent to: <span class="govuk-!-text-break-word">%{submission_email}</span></p>
     en:
+      make_your_changes_to_english_live:
+        body_html: |
+          <p>The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UK publishing team to publish links to your form on GOV.UK so people can find it.</p>
+          <p>Completed forms will be sent to: <span class="govuk-!-text-break-word">%{submission_email}</span></p>
       new:
         body_html: |
           <p>When you make your form live you’ll get a new URL for the English version.</p>

@@ -24,14 +24,19 @@ RSpec.describe Forms::MakeLanguageLiveController, type: :request do
       get make_language_live_path(form_id: form.id, language:)
       expect(response).to render_template("make_language_live/new")
       expect(response).to have_http_status(:ok)
+      expect(response.body).to include(I18n.t("page_titles.make_language_live.en"))
+      expect(response.body).to include(I18n.t("make_language_live.en.new.body_html", submission_email: form.submission_email))
     end
 
     context "when editing a draft of an existing live form" do
-      let(:form) { create(:form, :live) }
+      let(:form) { create(:form, :live_with_draft) }
 
-      it "redirects to the form task list" do
+      it "renders make your form live" do
         get make_language_live_path(form_id: form.id, language:)
-        expect(response).to redirect_to(form_path(form_id: form.id))
+        expect(response).to render_template("make_language_live/new")
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include(I18n.t("page_titles.make_your_changes_to_english_live"))
+        expect(response.body).to include(I18n.t("make_language_live.en.make_your_changes_to_english_live.body_html", submission_email: form.submission_email))
       end
     end
 
