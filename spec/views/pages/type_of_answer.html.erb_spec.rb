@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/type_of_answer.html.erb", type: :view do
-  let(:form) { create :form }
+  let(:form) { create :form, :with_group }
   let(:type_of_answer_input) { build :type_of_answer_input }
   let(:page) { OpenStruct.new(routing_conditions: [], answer_type: "number") }
   let(:question_number) { 1 }
@@ -77,10 +77,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
                         .text(normalize_ws: true))
     end
 
-    context "when multiple branches are enabled" do
-      let(:form) { create(:form, :with_group, group:) }
-      let(:group) { create(:group, multiple_branches_enabled: true) }
-
+    context "when multiple branches are enabled", :feature_multiple_branches do
       it "does not display a warning about routes being deleted if answer type changes" do
         expect(rendered).not_to have_selector(".govuk-notification-banner__content")
       end
