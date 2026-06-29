@@ -71,6 +71,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_26_145112) do
     t.index ["user_id"], name: "index_draft_questions_on_user_id"
   end
 
+  create_table "exit_pages", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "heading", comment: "The title used for the exit page "
+    t.text "markdown", comment: "The body content in markdown format"
+    t.bigint "question_page_id", null: false, comment: "The page that the exit page belongs to"
+    t.datetime "updated_at", null: false
+    t.index ["question_page_id"], name: "index_exit_pages_on_question_page_id"
+  end
+
   create_table "form_documents", force: :cascade do |t|
     t.jsonb "content", comment: "The JSON which describes the form"
     t.datetime "created_at", null: false
@@ -298,6 +307,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_26_145112) do
   add_foreign_key "create_form_events", "groups", on_delete: :cascade
   add_foreign_key "create_form_events", "users", on_delete: :cascade
   add_foreign_key "draft_questions", "users"
+  add_foreign_key "exit_pages", "pages", column: "question_page_id", on_delete: :cascade
   add_foreign_key "form_documents", "forms"
   add_foreign_key "form_translations", "forms"
   add_foreign_key "groups", "users", column: "creator_id"
