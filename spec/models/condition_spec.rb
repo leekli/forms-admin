@@ -264,8 +264,17 @@ RSpec.describe Condition, type: :model do
       end
     end
 
-    context "when is_exit_page?" do
+    context "when is_exit_page? using exit_page_markdown" do
       let(:condition) { create :condition, routing_page_id: routing_page.id, goto_page_id: nil, exit_page_markdown: "exit page" }
+
+      it "returns nil" do
+        expect(condition.warning_goto_page_doesnt_exist).to be_nil
+      end
+    end
+
+    context "when exit_page_id is present using ExitPage" do
+      let(:exit_page) { create :exit_page }
+      let(:condition) { create :condition, routing_page_id: routing_page.id, goto_page_id: nil, exit_page_id: exit_page.id }
 
       it "returns nil" do
         expect(condition.warning_goto_page_doesnt_exist).to be_nil
