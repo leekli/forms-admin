@@ -9,6 +9,7 @@ class Condition < ApplicationRecord
   belongs_to :goto_page, class_name: "Page", optional: true
 
   has_one :form, through: :routing_page
+  belongs_to :exit_page, optional: true
 
   before_destroy :destroy_postconditions
 
@@ -101,11 +102,12 @@ class Condition < ApplicationRecord
   def as_json(options = {})
     super(options.reverse_merge(
       methods: %i[validation_errors has_routing_errors],
+      except: %i[exit_page_id],
     ))
   end
 
   def as_form_document_condition
-    data = as_json(methods: %i[validation_errors])
+    data = as_json(methods: %i[validation_errors], except: %i[exit_page_id])
     data.merge(
       "routing_page_id" => routing_page&.external_id,
       "check_page_id" => check_page&.external_id,
