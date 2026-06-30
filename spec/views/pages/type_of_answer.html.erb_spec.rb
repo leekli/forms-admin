@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/type_of_answer.html.erb", type: :view do
-  let(:form) { create :form }
+  let(:form) { create :form, :with_group }
   let(:type_of_answer_input) { build :type_of_answer_input }
   let(:page) { OpenStruct.new(routing_conditions: [], answer_type: "number") }
   let(:question_number) { 1 }
@@ -75,6 +75,12 @@ describe "pages/type_of_answer.html.erb", type: :view do
       expect(Capybara.string(rendered.html).find(".govuk-notification-banner__content").text(normalize_ws: true))
         .to include(Capybara.string(I18n.t("type_of_answer.routing_warning_about_change_answer_type_html", pages_link_url: form_pages_path(form)))
                         .text(normalize_ws: true))
+    end
+
+    context "when multiple branches are enabled", :feature_multiple_branches do
+      it "does not display a warning about routes being deleted if answer type changes" do
+        expect(rendered).not_to have_selector(".govuk-notification-banner__content")
+      end
     end
 
     context "when no routing conditions set" do
