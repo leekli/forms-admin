@@ -142,6 +142,22 @@ namespace :organisations do
         Rails.logger.info "Organisation with slug '#{organisation_slug}' has no domains"
       end
     end
+
+    desc "Populate organisation domains using the email addresses of existing users"
+    task populate_from_users: :environment do
+      Organisation.includes(:users, :organisation_domains).find_each do |organisation|
+        next if organisation.users.empty?
+
+        users = organisation.users.to_a
+        domains = domains_for_users(users).uniq
+
+        domains.each do |domain|
+          organisation.organisation_domains.find_or_create_by!(domain: domain)
+        end
+
+        Rails.logger.info("Added domains for #{organisation.name}: #{domains.join(', ')}")
+      end
+    end
   end
 end
 
@@ -214,5 +230,16 @@ def change_organisation_internal_status(task:, organisation_slug: nil, status: n
     organisation.save!
 
     Rails.logger.info("#{task.name}: Made organisation '#{organisation.name}' #{status_string}")
+  end
+end
+
+def domains_for_users(users)
+  users.filter_map do |user|
+    next if user.email.blank?
+
+    email_domain = user.email.split("@").last&.downcase&.strip
+    next if email_domain.blank? || !user.email.include?("@")
+
+    email_domain
   end
 end

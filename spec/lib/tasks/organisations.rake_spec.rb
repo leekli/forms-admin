@@ -364,4 +364,29 @@ RSpec.describe "organisations.rake", type: :task do
         .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
     end
   end
+
+  describe "organisations:domains:populate_from_users" do
+    subject(:task) do
+      Rake::Task["organisations:domains:populate_from_users"]
+    end
+
+    it "creates one domain per unique user email domain for each organisation" do
+      first_organisation = create :organisation, name: "Department for Testing", slug: "dft"
+      second_organisation = create :organisation, name: "Department for Experiments", slug: "dfe"
+
+      create :user, organisation: first_organisation, email: "alice@example.gov.uk"
+      create :user, organisation: first_organisation, email: "bob@example.gov.uk"
+      create :user, organisation: first_organisation, email: "carol@example.org"
+
+      create :user, organisation: second_organisation, email: "dana@service.gov.uk"
+
+      expect(Rails.logger).to receive(:info).with("Added domains for Department for Testing: example.gov.uk, example.org")
+      expect(Rails.logger).to receive(:info).with("Added domains for Department for Experiments: service.gov.uk")
+
+      task.invoke
+
+      expect(first_organisation.reload.organisation_domains.pluck(:domain)).to match_array(%w[example.gov.uk example.org])
+      expect(second_organisation.reload.organisation_domains.pluck(:domain)).to match_array(%w[service.gov.uk])
+    end
+  end
 end
