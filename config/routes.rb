@@ -279,6 +279,7 @@ Rails.application.routes.draw do
     get "live-forms-csv", to: "reports#live_forms_csv", as: :report_live_forms_csv
     get "live-questions-csv", to: "reports#live_questions_csv", as: :report_live_questions_csv
     get "contact-for-research", to: "reports#contact_for_research", as: :report_contact_for_research
+    get "organisations", to: "reports#organisation_domains", as: :report_organisation_domains
   end
 
   scope "api/v2", as: "api_v2" do
