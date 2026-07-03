@@ -11,7 +11,7 @@
       "version": "20"
     },
     // Provisions a local PostgreSQL instance within the environment boundary seamlessly
-    "ghcr.io/devcontainers/features/postgres:1": {
+    "ghcr.io/itsmechlark/features/postgresql:1": {
       "version": "15"
     }
   },
