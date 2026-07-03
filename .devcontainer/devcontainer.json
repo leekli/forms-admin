@@ -6,20 +6,19 @@
 
   // Features keep setup streamlined without forcing custom Dockerfiles
   "features": {
-    // Installs Node.js 20 LTS as specified in the project's .nvmrc / documentation
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "20"
+    "ghcr.io/devcontainers/features/node:2": {
+      "version": "20",
+      "installYarnUsingApt": false
     },
-    // Provisions a local PostgreSQL instance within the environment boundary seamlessly
     "ghcr.io/itsmechlark/features/postgresql:1": {
       "version": "15"
     }
   },
 
-  // Pulls system-level native compilation dependencies required by pg and native extensions
-  "updateContentCommand": "sudo apt-get update && sudo apt-get install -y build-essential libpq-dev git",
+  // Remove any stale Yarn apt source, then install native build dependencies for Ruby and PostgreSQL
+  "updateContentCommand": "sudo find /etc/apt -maxdepth 2 -type f \\( -name '*yarn*' -o -name '*Yarn*' \\) -delete && sudo apt-get update && sudo apt-get install -y build-essential libpq-dev git",
 
-  // High-performance lifecycle command to fully provision the repository in the background
+  // Install Ruby and JS dependencies, then prepare the Rails database
   "postCreateCommand": "bundle install && npm install && ./bin/rails db:prepare",
 
   // Environment variables required by the app to connect instantly to the Postgres feature container
@@ -37,12 +36,20 @@
     }
   },
 
-  // Custom VS Code workspace settings and explicit extension mapping for elite DX
+  // Custom VS Code workspace settings and explicit extension mapping for a polished developer experience
   "customizations": {
     "vscode": {
       "settings": {
         "editor.formatOnSave": true,
         "editor.tabSize": 2,
+        "files.eol": "\n",
+        "files.insertFinalNewline": true,
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash"
+          }
+        },
 
         // Ruby Development & Linting Configuration
         "ruby.lsp.enabled": true,
@@ -52,29 +59,33 @@
           "editor.formatOnSave": true
         },
 
-        // JavaScript / Vitest Ecosystem Configuration
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        // JavaScript / CSS / markdown formatting in the repo
         "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
           "editor.tabSize": 2
+        },
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[scss]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
         }
       },
       "extensions": [
-        // Crucial Ruby extensions providing deep code intelligence
         "Shopify.ruby-lsp",
         "misogi.ruby-rubocop",
         "kaiwood.endwise",
-
-        // Frontend tooling compatibility (Vite / Javascript / Vitest)
         "esbenp.prettier-vscode",
+        "redhat.vscode-yaml",
+        "eamodio.gitlens",
+        "GitHub.vscode-pull-request-github",
+        "ms-azuretools.vscode-docker",
         "vitest.explorer",
-
-        // RSpec test run orchestrator inside VS Code UI
         "banyis.rspec-snippets",
         "test-explorer.vscode-test-explorer",
-
-        // Universal developer quality-of-life tools
         "editorconfig.editorconfig",
-        "donjayamanne.githistory"
+        "donjayamanne.githistory",
+        "yzhang.markdown-all-in-one"
       ]
     }
   },
