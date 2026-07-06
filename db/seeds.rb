@@ -14,6 +14,8 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
     name: "Government Digital Service",
     abbreviation: "GDS",
   )
+  gds.organisation_domains.create! domain: "digital.cabinet-office.gov.uk"
+  gds.organisation_domains.create! domain: "dsit.gov.uk"
 
   # Create default super-admin
   default_user = User.create!({ email: "example@example.com",
@@ -32,6 +34,8 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
 
   # create extra organisations
   test_org = Organisation.create! slug: "test-org", name: "Test Org", abbreviation: "TO"
+  test_org.organisation_domains.create! domain: "digital.cabinet-office.gov.uk"
+  test_org.organisation_domains.create! domain: "dsit.gov.uk"
   mot_org = Organisation.create! slug: "ministry-of-tests", name: "Ministry of Tests", abbreviation: "MOT"
   Organisation.create! slug: "department-for-testing", name: "Department for Testing", abbreviation: "DfT"
   Organisation.create! slug: "closed-org", name: "Closed Org", abbreviation: "CO", closed: true
