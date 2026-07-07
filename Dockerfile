@@ -60,6 +60,10 @@ RUN apk update
 RUN apk upgrade --available
 RUN apk add libc6-compat openssl-dev libpq
 
+ADD ./docker/eu-west-2-bundle.pem /tmp/eu-west-2-bundle.pem
+RUN cat /tmp/eu-west-2-bundle.pem >> /etc/ssl/certs/ca-certificates.crt \
+    && rm /tmp/eu-west-2-bundle.pem
+
 RUN adduser -D ruby
 RUN chown ruby:ruby -R /app
 
