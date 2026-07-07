@@ -51,14 +51,6 @@ private
     request.env["warden.options"][:attempted_path]
   end
 
-  def default_provider
-    if Settings.auth_provider == "gds_sso"
-      "gds"
-    else
-      Settings.auth_provider
-    end
-  end
-
   def auth0_sign_out_url
     request_params = {
       returnTo: root_url,
