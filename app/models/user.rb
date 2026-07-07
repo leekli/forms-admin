@@ -81,12 +81,6 @@ class User < ApplicationRecord
     self.has_access = false if organisation_restricted_access?
   end
 
-  # We need to keep this method until the GDS SSO gem is removed.
-  # The gem adds a Warden::Manager.after_authentication block
-  # on loading which calls this method after sign-in.
-  # When the gem is removed, this method will be deleted.
-  def clear_remotely_signed_out!; end
-
   def self.find_for_auth(attributes)
     user = where(provider: attributes[:provider], uid: attributes[:uid]).first ||
       where("lower(email) = ?", attributes[:email].downcase).first

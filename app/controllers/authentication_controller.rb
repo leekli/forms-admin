@@ -45,6 +45,10 @@ class AuthenticationController < WebController
     end
   end
 
+  def failure
+    render "authentications/failure"
+  end
+
 private
 
   def attempted_path

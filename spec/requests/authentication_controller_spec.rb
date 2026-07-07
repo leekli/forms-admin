@@ -98,13 +98,15 @@ RSpec.describe AuthenticationController, type: :request do
 
   describe "#callback_from_omniauth" do
     it "is called by OmniAuth provider" do
-      post "/auth/gds"
+      allow(Settings).to receive(:auth_provider).and_return("auth0")
 
-      expect(response).to redirect_to("/auth/gds/callback")
+      post "/auth/auth0"
+
+      expect(response).to redirect_to("/auth/auth0/callback")
 
       allow(controller_spy).to receive(:callback_from_omniauth).and_call_original
 
-      get "/auth/gds/callback"
+      get "/auth/auth0/callback"
 
       expect(controller_spy).to have_received :callback_from_omniauth
     end
