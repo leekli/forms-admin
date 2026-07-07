@@ -74,13 +74,9 @@ RSpec.describe AuthenticationController, type: :request do
         allow(controller_spy).to receive(:redirect_to_sign_in).and_call_original
 
         # shorten the auth_valid_for time for testing
-        GDS::SSO::Config.auth_valid_for = 1
+        allow(Settings).to receive(:auth_valid_for).and_return(1)
 
         logout
-      end
-
-      after do
-        GDS::SSO::Config.auth_valid_for = Settings.auth_valid_for
       end
 
       it "re-authenticates after the configured time" do

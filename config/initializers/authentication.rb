@@ -46,8 +46,6 @@ Rails.application.config.before_initialize do
     warden.default_strategies(Settings.auth_provider.to_sym, :gds_bearer_token)
     warden.failure_app = AuthenticationController
   end
-
-  GDS::SSO::Config.auth_valid_for = Settings.auth_valid_for
 end
 
 # Need to do this because Signon allows both GET and POST requests
@@ -57,6 +55,27 @@ OmniAuth.config.allowed_request_methods = %i[post]
 # auth0 see https://gitlab.com/oauth-xx/oauth2/#global-configuration
 OAuth2.configure do |config|
   config.silence_extra_tokens_warning = true
+end
+
+# Keep users signed in only for as long as Settings.auth_valid_for allows, regardless
+# of auth provider. Replaces gds-sso's own serialize_into_session/serialize_from_session,
+# which read the equivalent value from GDS::SSO::Config.auth_valid_for.
+Warden::Manager.serialize_into_session do |user|
+  [user.uid, Time.zone.now.utc.iso8601] if user.respond_to?(:uid) && user.uid
+end
+
+Warden::Manager.serialize_from_session do |(uid, auth_timestamp)|
+  if auth_timestamp.is_a?(String)
+    begin
+      auth_timestamp = Time.zone.parse(auth_timestamp)
+    rescue ArgumentError
+      auth_timestamp = nil
+    end
+  end
+
+  if auth_timestamp && ((auth_timestamp + Settings.auth_valid_for) > Time.zone.now.utc)
+    User.where(uid:, remotely_signed_out: false).first
+  end
 end
 
 # store the auth0 connection used to login in the warden session
