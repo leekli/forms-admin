@@ -539,6 +539,7 @@ en:
         other: Optional tasks
     task_list_create:
       create_form_optional_subsection:
+        brand: Choose a brand for your form
         copy_of_answers: Give people the option to ask for a copy of their answers
         payment_link: Add a link to a payment page on GOV.UK Pay
       create_form_section:
@@ -587,6 +588,7 @@ en:
         title: Create a Welsh version of your form (optional)
     task_list_edit:
       create_form_optional_subsection:
+        brand: Choose a brand for your form
         copy_of_answers: Give people the option to ask for a copy of their answers
         payment_link: Add a link to a payment page on GOV.UK Pay
       create_form_section:
