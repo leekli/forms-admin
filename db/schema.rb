@@ -138,6 +138,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_08_131956) do
 
   create_table "forms", force: :cascade do |t|
     t.text "available_languages", default: ["en"], null: false, array: true
+    t.string "brand_id"
     t.integer "copied_from_id"
     t.datetime "created_at", null: false
     t.bigint "creator_id"
