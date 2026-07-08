@@ -12,7 +12,9 @@
     },
     "ghcr.io/itsmechlark/features/postgresql:1": {
       "version": "15"
-    }
+    },
+    "ghcr.io/stu-bell/devcontainer-features/claude-code:0": {},
+    "ghcr.io/devcontainers/features/copilot-cli:1": {}
   },
 
   // Remove any stale Yarn apt source, then install native build dependencies for Ruby and PostgreSQL
@@ -85,7 +87,12 @@
         "test-explorer.vscode-test-explorer",
         "editorconfig.editorconfig",
         "donjayamanne.githistory",
-        "yzhang.markdown-all-in-one"
+        "yzhang.markdown-all-in-one",
+        
+        // AI tools
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "anthropic.claude-code"
       ]
     }
   },
