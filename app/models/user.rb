@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  # TODO: Drop this column in a future migration
+  self.ignored_columns += [:remotely_signed_out]
+
   class UserAuthenticationException < StandardError; end
 
   EMAIL_DOMAIN_DENYLIST = [
