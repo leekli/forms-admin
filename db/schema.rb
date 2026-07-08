@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_14_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_15_095436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -61,6 +61,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_14_090000) do
     t.index ["group_id", "form_name", "dedup_version"], name: "idx_on_group_id_form_name_dedup_version_9b12b4ae60", unique: true
     t.index ["group_id"], name: "index_create_form_events_on_group_id"
     t.index ["user_id"], name: "index_create_form_events_on_user_id"
+  end
+
+  create_table "delivery_configurations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "delivery_method", null: false
+    t.string "delivery_schedule", null: false
+    t.bigint "form_id", null: false
+    t.string "formats", default: [], null: false, array: true
+    t.datetime "updated_at", null: false
+    t.index ["form_id"], name: "index_delivery_configurations_on_form_id"
   end
 
   create_table "draft_questions", force: :cascade do |t|
@@ -340,6 +350,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_14_090000) do
   add_foreign_key "conditions", "exit_pages"
   add_foreign_key "create_form_events", "groups", on_delete: :cascade
   add_foreign_key "create_form_events", "users", on_delete: :cascade
+  add_foreign_key "delivery_configurations", "forms", on_delete: :cascade
   add_foreign_key "draft_questions", "users"
   add_foreign_key "exit_page_translations", "exit_pages"
   add_foreign_key "exit_pages", "pages", column: "question_page_id", on_delete: :cascade
