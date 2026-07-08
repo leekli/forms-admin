@@ -1455,12 +1455,9 @@ en:
     index:
       table_caption: All organisations
       table_headings:
-        closed: Closed
-        groups: Groups
-        internal: Internal
+        forms: Forms
         mou_signed: MOU signed
         name: Name
-        slug: Slug
         users: Users
     show:
       admin_users:

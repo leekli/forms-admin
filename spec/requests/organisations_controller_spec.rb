@@ -22,10 +22,14 @@ RSpec.describe OrganisationsController, type: :request do
     let!(:organisation) { create :organisation, slug: "department-for-testing" }
     let!(:closed_organisation) { create :organisation, slug: "closed-department", closed: true }
 
+    let(:group) { create :group, organisation: }
+
     include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
+        create(:form, :with_group, group:)
+
         login_as_super_admin_user
 
         get path
@@ -39,6 +43,12 @@ RSpec.describe OrganisationsController, type: :request do
       it "lists all organisations, including closed ones" do
         expect(response.body).to include(organisation.name)
         expect(response.body).to include(closed_organisation.name)
+      end
+
+      it "shows the number of forms in each organisation" do
+        page = Capybara.string(response.body)
+        expect(page).to have_xpath "//tbody/tr[2]/td[3]", text: "1"
+        expect(page).to have_xpath "//tbody/tr[1]/td[3]", text: "0"
       end
     end
   end

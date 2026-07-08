@@ -5,13 +5,13 @@ describe "organisations/index.html.erb" do
   let(:closed_organisation) { create :organisation, slug: "closed-department", closed: true }
   let(:organisations) { [organisation, closed_organisation] }
   let(:user_counts) { { organisation.id => 3 } }
-  let(:group_counts) { { organisation.id => 2 } }
+  let(:form_counts) { { organisation.id => 2 } }
   let(:organisation_ids_with_mou) { Set.new([organisation.id]) }
 
   before do
     assign(:organisations, organisations)
     assign(:user_counts, user_counts)
-    assign(:group_counts, group_counts)
+    assign(:form_counts, form_counts)
     assign(:organisation_ids_with_mou, organisation_ids_with_mou)
 
     render template: "organisations/index"
@@ -30,23 +30,19 @@ describe "organisations/index.html.erb" do
     expect(rendered).to have_link(closed_organisation.name_with_abbreviation, href: organisation_path(closed_organisation))
   end
 
-  it "contains the organisation slug" do
-    expect(rendered).to have_text(organisation.slug)
+  it "contains the user and form counts" do
+    expect(rendered).to have_xpath "//tbody/tr[1]/td[2]", text: "3"
+    expect(rendered).to have_xpath "//tbody/tr[1]/td[3]", text: "2"
   end
 
-  it "contains the user and group counts" do
-    expect(rendered).to have_xpath "//tbody/tr[1]/td[5]", text: "3"
-    expect(rendered).to have_xpath "//tbody/tr[1]/td[6]", text: "2"
-  end
-
-  it "shows zero counts for organisations without users or groups" do
-    expect(rendered).to have_xpath "//tbody/tr[2]/td[5]", text: "0"
-    expect(rendered).to have_xpath "//tbody/tr[2]/td[6]", text: "0"
+  it "shows zero counts for organisations without users or forms" do
+    expect(rendered).to have_xpath "//tbody/tr[2]/td[2]", text: "0"
+    expect(rendered).to have_xpath "//tbody/tr[2]/td[3]", text: "0"
   end
 
   it "shows whether an MOU has been signed" do
-    expect(rendered).to have_xpath "//tbody/tr[1]/td[7]", text: I18n.t("organisations.boolean.true")
-    expect(rendered).to have_xpath "//tbody/tr[2]/td[7]", text: I18n.t("organisations.boolean.false")
+    expect(rendered).to have_xpath "//tbody/tr[1]/td[4]", text: I18n.t("organisations.boolean.true")
+    expect(rendered).to have_xpath "//tbody/tr[2]/td[4]", text: I18n.t("organisations.boolean.false")
   end
 
   context "when there are no organisations" do
