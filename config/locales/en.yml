@@ -1453,6 +1453,10 @@ en:
       'false': 'No'
       'true': 'Yes'
     index:
+      organisation_count:
+        one: 1 organisation
+        other: "%{count} organisations"
+      showing_count: Showing %{from} to %{to} of %{count} organisations
       table_caption: All organisations
       table_headings:
         forms: Forms

@@ -7,8 +7,10 @@ describe "organisations/index.html.erb" do
   let(:user_counts) { { organisation.id => 3 } }
   let(:form_counts) { { organisation.id => 2 } }
   let(:organisation_ids_with_mou) { Set.new([organisation.id]) }
+  let(:pagy) { Pagy.new(count: organisations.size, page: 1, limit: 50) }
 
   before do
+    assign(:pagy, pagy)
     assign(:organisations, organisations)
     assign(:user_counts, user_counts)
     assign(:form_counts, form_counts)
@@ -19,6 +21,10 @@ describe "organisations/index.html.erb" do
 
   it "contains page heading" do
     expect(rendered).to have_css("h1.govuk-heading-l", text: I18n.t("page_titles.organisations"))
+  end
+
+  it "contains the total number of organisations" do
+    expect(rendered).to have_css("p", text: "2 organisations")
   end
 
   it "contains a scrollable wrapper with a table in it" do
@@ -43,6 +49,14 @@ describe "organisations/index.html.erb" do
   it "shows whether an MOU has been signed" do
     expect(rendered).to have_xpath "//tbody/tr[1]/td[4]", text: I18n.t("organisations.boolean.true")
     expect(rendered).to have_xpath "//tbody/tr[2]/td[4]", text: I18n.t("organisations.boolean.false")
+  end
+
+  context "when the organisations span multiple pages" do
+    let(:pagy) { Pagy.new(count: 120, page: 1, limit: 50) }
+
+    it "shows how many organisations are on this page out of the total" do
+      expect(rendered).to have_css("p", text: "Showing 1 to 50 of 120 organisations")
+    end
   end
 
   context "when there are no organisations" do
