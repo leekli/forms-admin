@@ -44,6 +44,10 @@ describe "organisations/show.html.erb" do
     expect(rendered).to have_text("testing.gov.uk")
   end
 
+  it "does not show the MOU guidance" do
+    expect(rendered).not_to have_text("Someone from each organisation needs to agree")
+  end
+
   context "when the organisation has no admins, MOU signatures or domains" do
     let(:organisation) { create :organisation, slug: "empty-department", abbreviation: nil }
     let(:organisation_domains) { [] }
@@ -52,6 +56,12 @@ describe "organisations/show.html.erb" do
       expect(rendered).to have_text(I18n.t("organisations.show.admin_users.none"))
       expect(rendered).to have_text(I18n.t("organisations.show.mou_signatures.none"))
       expect(rendered).to have_text(I18n.t("organisations.show.domains.none"))
+    end
+
+    it "shows the MOU guidance with links to the agreements" do
+      expect(rendered).to have_text("Someone from each organisation needs to agree")
+      expect(rendered).to have_link(mou_signature_url, href: mou_signature_url)
+      expect(rendered).to have_link(non_crown_agreement_signature_url, href: non_crown_agreement_signature_url)
     end
 
     it "shows a fallback for the blank abbreviation" do
