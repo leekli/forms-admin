@@ -214,6 +214,8 @@ Rails.application.routes.draw do
 
   resources :mou_signatures, only: %i[index], path: "mous"
 
+  resources :organisations, only: %i[index show]
+
   resource :mou_signature, only: %i[new show create], path: "/memorandum-of-understanding", defaults: { agreement_type: :crown }, as: :mou_signature do
     get "/signed", to: "mou_signatures#confirmation", as: :confirmation
   end

@@ -1447,6 +1447,41 @@ en:
 
       If you pasted the web address, check you copied the entire address.
     title: Page not found
+  organisations:
+    boolean:
+      'false': 'No'
+      'true': 'Yes'
+    index:
+      table_caption: All organisations
+      table_headings:
+        closed: Closed
+        groups: Groups
+        internal: Internal
+        mou_signed: MOU signed
+        name: Name
+        slug: Slug
+        users: Users
+    show:
+      admin_users:
+        heading: Organisation admins
+        none: This organisation does not have any organisation admins.
+      domains:
+        heading: Email domains
+        none: This organisation does not have any email domains.
+      mou_signatures:
+        heading: MOUs and agreements
+        none: No one has agreed an MOU or agreement for this organisation.
+      not_set: Not set
+      summary:
+        abbreviation: Abbreviation
+        closed: Closed
+        created_at: Created
+        govuk_content_id: GOV.UK content ID
+        groups: Number of groups
+        internal: Internal
+        name: Name
+        slug: Slug
+        users: Number of users
   page_conditions:
     condition_answer_value_text: "“%{answer_value}”"
     condition_answer_value_text2: "‘%{answer_value}’"
@@ -1588,6 +1623,7 @@ en:
     non_crown_agreement_confirmation: You’ve agreed to the GOV.UK Forms agreement
     non_crown_agreement_new: GOV.UK Forms agreement
     not_found: Page not found
+    organisations: Organisations
     payment_link: Add a link to a payment page on GOV.UK Pay
     privacy_policy: Provide a link to privacy information for this form
     question_text: What’s your question?

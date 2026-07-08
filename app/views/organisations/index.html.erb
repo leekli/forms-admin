@@ -1,0 +1,43 @@
+<% set_page_title(t("page_titles.organisations")) %>
+
+<h1 class="govuk-heading-l"><%= t("page_titles.organisations") %></h1>
+
+<% if @organisations.any? %>
+  <%= govuk_pagination(pagy: @pagy) %>
+
+  <%= render ScrollingWrapperComponent::View.new(aria_label: t("organisations.index.table_caption")) do |table| %>
+    <%= govuk_table do |table| %>
+      <%= table.with_caption(size: 'm', text: t("organisations.index.table_caption")) %>
+
+      <%= table.with_head do |head|
+        head.with_row do |row|
+          row.with_cell(header: true, text: t("organisations.index.table_headings.name"))
+          row.with_cell(header: true, text: t("organisations.index.table_headings.slug"))
+          row.with_cell(header: true, text: t("organisations.index.table_headings.internal"))
+          row.with_cell(header: true, text: t("organisations.index.table_headings.closed"))
+          row.with_cell(header: true, text: t("organisations.index.table_headings.users"))
+          row.with_cell(header: true, text: t("organisations.index.table_headings.groups"))
+          row.with_cell(header: true, text: t("organisations.index.table_headings.mou_signed"))
+        end
+      end %>
+
+      <%= table.with_body do |body|
+        @organisations.each do |organisation|
+          body.with_row do |row|
+            row.with_cell do
+              govuk_link_to(organisation.name_with_abbreviation, organisation_path(organisation))
+            end
+            row.with_cell(text: organisation.slug)
+            row.with_cell(text: t("organisations.boolean.#{organisation.internal}"))
+            row.with_cell(text: t("organisations.boolean.#{organisation.closed}"))
+            row.with_cell(text: @user_counts.fetch(organisation.id, 0).to_s)
+            row.with_cell(text: @group_counts.fetch(organisation.id, 0).to_s)
+            row.with_cell(text: t("organisations.boolean.#{@organisation_ids_with_mou.include?(organisation.id)}"))
+          end
+        end
+      end %>
+    <% end %>
+  <% end %>
+
+  <%= govuk_pagination(pagy: @pagy) %>
+<% end %>
