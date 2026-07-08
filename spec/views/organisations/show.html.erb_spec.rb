@@ -17,10 +17,8 @@ describe "organisations/show.html.erb" do
   end
 
   it "contains a summary of the organisation's details" do
-    expect(rendered).to have_css(".govuk-summary-list__key", text: I18n.t("organisations.show.summary.name"))
-    expect(rendered).to have_css(".govuk-summary-list__value", text: organisation.name)
+    expect(rendered).to have_css(".govuk-summary-list__key", text: I18n.t("organisations.show.summary.slug"))
     expect(rendered).to have_css(".govuk-summary-list__value", text: organisation.slug)
-    expect(rendered).to have_css(".govuk-summary-list__value", text: organisation.abbreviation)
   end
 
   it "shows whether the organisation is internal or closed" do
@@ -49,7 +47,7 @@ describe "organisations/show.html.erb" do
   end
 
   context "when the organisation has no admins, MOU signatures or domains" do
-    let(:organisation) { create :organisation, slug: "empty-department", abbreviation: nil }
+    let(:organisation) { create :organisation, slug: "empty-department" }
     let(:organisation_domains) { [] }
 
     it "shows a message for each empty section" do
@@ -64,7 +62,7 @@ describe "organisations/show.html.erb" do
       expect(rendered).to have_link(non_crown_agreement_signature_url, href: non_crown_agreement_signature_url)
     end
 
-    it "shows a fallback for the blank abbreviation" do
+    it "shows a fallback for the blank GOV.UK content ID" do
       expect(rendered).to have_css(".govuk-summary-list__value", text: I18n.t("organisations.show.not_set"))
     end
   end

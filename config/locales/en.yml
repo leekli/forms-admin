@@ -1475,13 +1475,11 @@ en:
         none: No one has agreed an MOU or agreement for this organisation.
       not_set: Not set
       summary:
-        abbreviation: Abbreviation
         closed: Closed
         created_at: Created
         govuk_content_id: GOV.UK content ID
         groups: Number of groups
         internal: Internal
-        name: Name
         slug: Slug
         users: Number of users
   page_conditions:
