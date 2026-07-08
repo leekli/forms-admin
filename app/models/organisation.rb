@@ -2,6 +2,7 @@ class Organisation < ApplicationRecord
   has_paper_trail
 
   has_many :groups
+  has_many :group_forms, through: :groups
   has_many :users
 
   has_many :mou_signatures

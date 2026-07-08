@@ -6,6 +6,7 @@ describe "organisations/show.html.erb" do
 
   before do
     organisation_domains
+    create(:form, :with_group, group: create(:group, organisation:))
 
     assign(:organisation, organisation)
 
@@ -19,6 +20,15 @@ describe "organisations/show.html.erb" do
   it "contains a summary of the organisation's details" do
     expect(rendered).to have_css(".govuk-summary-list__key", text: I18n.t("organisations.show.summary.slug"))
     expect(rendered).to have_css(".govuk-summary-list__value", text: organisation.slug)
+  end
+
+  it "shows the number of forms between the user and group counts" do
+    users_index = rendered.index(I18n.t("organisations.show.summary.users"))
+    forms_index = rendered.index(I18n.t("organisations.show.summary.forms"))
+    groups_index = rendered.index(I18n.t("organisations.show.summary.groups"))
+
+    expect(forms_index).to be_between(users_index, groups_index)
+    expect(rendered).to have_css(".govuk-summary-list__row", text: /#{I18n.t('organisations.show.summary.forms')}\s*1/)
   end
 
   it "shows whether the organisation is internal or closed" do

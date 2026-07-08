@@ -37,6 +37,11 @@
       end
 
       summary_list.with_row do |row|
+        row.with_key { t('organisations.show.summary.forms') }
+        row.with_value { @organisation.group_forms.count.to_s }
+      end
+
+      summary_list.with_row do |row|
         row.with_key { t('organisations.show.summary.groups') }
         row.with_value { @organisation.groups.count.to_s }
       end

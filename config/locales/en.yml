@@ -1477,6 +1477,7 @@ en:
       summary:
         closed: Closed
         created_at: Created
+        forms: Number of forms
         govuk_content_id: GOV.UK content ID
         groups: Number of groups
         internal: Internal
