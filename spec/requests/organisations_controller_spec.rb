@@ -51,6 +51,35 @@ RSpec.describe OrganisationsController, type: :request do
         expect(page).to have_xpath "//tbody/tr[1]/td[3]", text: "0"
       end
     end
+
+    context "when filtering" do
+      let!(:organisation_with_mou) { create :organisation, :with_signed_mou, slug: "department-with-mou" }
+
+      before do
+        login_as_super_admin_user
+      end
+
+      it "filters organisations by name" do
+        get path, params: { filter: { name: "closed" } }
+
+        expect(response.body).to include(closed_organisation.name)
+        expect(response.body).not_to include(organisation.name)
+      end
+
+      it "filters organisations by whether an MOU is signed" do
+        get path, params: { filter: { mou_signed: "true" } }
+
+        expect(response.body).to include(organisation_with_mou.name)
+        expect(response.body).not_to include(closed_organisation.name)
+      end
+
+      it "filters organisations without a signed MOU" do
+        get path, params: { filter: { mou_signed: "false" } }
+
+        expect(response.body).to include(closed_organisation.name)
+        expect(response.body).not_to include(organisation_with_mou.name)
+      end
+    end
   end
 
   describe "#show" do

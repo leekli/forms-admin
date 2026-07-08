@@ -2,6 +2,38 @@
 
 <h1 class="govuk-heading-l"><%= t("page_titles.organisations") %></h1>
 
+<div class="app-filter govuk-grid-row">
+  <%= form_with(model: @filter_input, scope: :filter, url: organisations_path, method: 'get', local: true, class: 'govuk-clearfix') do |f| %>
+    <div class="govuk-grid-row govuk-!-padding-left-3 govuk-!-padding-right-3">
+      <div class="govuk-grid-column-one-third">
+        <%= f.govuk_text_field :name,
+          label: { text: t('organisations.index.filter.name.label'), size: 's' },
+          hint: { text: t('organisations.index.filter.name.hint') } %>
+      </div>
+      <div class="govuk-grid-column-one-third">
+        <%= f.govuk_collection_select :mou_signed,
+          @filter_input.mou_signed_options,
+          :value,
+          :label,
+          class: ["govuk-!-width-full"],
+          label: { text: t('organisations.index.filter.mou_signed.label'), size: 's' },
+          hint: { text: t('organisations.index.filter.mou_signed.hint') } %>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row govuk-!-padding-left-3 govuk-!-padding-right-3">
+      <div class="govuk-grid-column-one-third">
+        <div class="govuk-button-group">
+          <%= f.govuk_submit(t("organisations.index.filter.submit")) %>
+          <% if @filter_input.has_filters? %>
+            <%= govuk_link_to t('organisations.index.filter.clear_filter'), organisations_path, no_visited_state: true %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
 <% if @organisations.any? %>
   <p class="govuk-body">
     <% if @pagy.pages > 1 %>
@@ -38,4 +70,6 @@
   <% end %>
 
   <%= govuk_pagination(pagy: @pagy) %>
+<% else %>
+  <p class="govuk-body"><%= t("organisations.index.no_results") %></p>
 <% end %>

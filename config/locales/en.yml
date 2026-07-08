@@ -1453,6 +1453,17 @@ en:
       'false': 'No'
       'true': 'Yes'
     index:
+      filter:
+        clear_filter: Clear filter
+        mou_signed:
+          any: All organisations
+          hint: Filter by whether an MOU or agreement has been agreed
+          label: MOU signed
+        name:
+          hint: Enter full or partial name or abbreviation
+          label: Name
+        submit: Filter
+      no_results: No organisations found.
       organisation_count:
         one: 1 organisation
         other: "%{count} organisations"

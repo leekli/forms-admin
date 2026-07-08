@@ -8,9 +8,11 @@ describe "organisations/index.html.erb" do
   let(:form_counts) { { organisation.id => 2 } }
   let(:organisation_ids_with_mou) { Set.new([organisation.id]) }
   let(:pagy) { Pagy.new(count: organisations.size, page: 1, limit: 50) }
+  let(:filter_input) { Organisations::FilterInput.new }
 
   before do
     assign(:pagy, pagy)
+    assign(:filter_input, filter_input)
     assign(:organisations, organisations)
     assign(:user_counts, user_counts)
     assign(:form_counts, form_counts)
@@ -25,6 +27,28 @@ describe "organisations/index.html.erb" do
 
   it "contains the total number of organisations" do
     expect(rendered).to have_css("p", text: "2 organisations")
+  end
+
+  it "contains a filter form" do
+    expect(rendered).to have_field("filter[name]")
+    expect(rendered).to have_select("filter[mou_signed]", options: [
+      I18n.t("organisations.index.filter.mou_signed.any"),
+      I18n.t("organisations.boolean.true"),
+      I18n.t("organisations.boolean.false"),
+    ])
+    expect(rendered).to have_button(I18n.t("organisations.index.filter.submit"))
+  end
+
+  it "does not show the clear filter link when no filters are set" do
+    expect(rendered).not_to have_link(I18n.t("organisations.index.filter.clear_filter"))
+  end
+
+  context "when filters are set" do
+    let(:filter_input) { Organisations::FilterInput.new(name: "testing") }
+
+    it "shows a link to clear the filter" do
+      expect(rendered).to have_link(I18n.t("organisations.index.filter.clear_filter"), href: organisations_path)
+    end
   end
 
   it "contains a scrollable wrapper with a table in it" do
@@ -64,6 +88,10 @@ describe "organisations/index.html.erb" do
 
     it "does not show the table" do
       expect(rendered).not_to have_css("table")
+    end
+
+    it "shows a message that no organisations were found" do
+      expect(rendered).to have_text(I18n.t("organisations.index.no_results"))
     end
   end
 end
