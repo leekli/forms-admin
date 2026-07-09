@@ -24,6 +24,7 @@ class NavigationItemsService
       your_groups_navigation_item,
       mou_navigation_item,
       users_navigation_item,
+      organisations_navigation_item,
       reports_navigation_item,
       support_navigation_item,
       profile_navigation_item,
@@ -51,6 +52,12 @@ private
     return nil unless should_show_user_profile_link?
 
     NavigationItem.new(text: I18n.t("header.users"), href: users_path, active: false)
+  end
+
+  def organisations_navigation_item
+    return nil unless should_show_organisations_link?
+
+    NavigationItem.new(text: I18n.t("header.organisations"), href: organisations_path, active: false)
   end
 
   def reports_navigation_item
@@ -101,6 +108,10 @@ private
 
   def should_show_mous_link?
     Pundit.policy(user, :mou_signature).can_manage_mous?
+  end
+
+  def should_show_organisations_link?
+    Pundit.policy(user, :organisation).can_view_organisations?
   end
 
   def should_show_reports_link?

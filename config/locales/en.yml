@@ -910,6 +910,7 @@ en:
       </p>
   header:
     mous: MOUs
+    organisations: Organisations
     product_name: Forms
     reports: Reports
     sign_out: Sign out
@@ -1447,6 +1448,52 @@ en:
 
       If you pasted the web address, check you copied the entire address.
     title: Page not found
+  organisations:
+    boolean:
+      'false': 'No'
+      'true': 'Yes'
+    index:
+      filter:
+        clear_filter: Clear filter
+        mou_signed:
+          any: All organisations
+          hint: Filter by whether an MOU or agreement has been agreed
+          label: MOU signed
+        name:
+          hint: Enter full or partial name or abbreviation
+          label: Name
+        submit: Filter
+      no_results: No organisations found.
+      organisation_count:
+        one: 1 organisation
+        other: "%{count} organisations"
+      showing_count: Showing %{from} to %{to} of %{count} organisations
+      table_caption: All organisations
+      table_headings:
+        forms: Forms
+        mou_signed: MOU signed
+        name: Name
+        users: Users
+    show:
+      admin_users:
+        heading: Organisation admins
+        none: This organisation does not have any organisation admins.
+      domains:
+        heading: Email domains
+        none: This organisation does not have any email domains.
+      mou_signatures:
+        heading: MOUs and agreements
+        none: No one has agreed an MOU or agreement for this organisation.
+      not_set: Not set
+      summary:
+        closed: Closed
+        created_at: Created
+        forms: Number of forms
+        govuk_content_id: GOV.UK content ID
+        groups: Number of groups
+        internal: Internal
+        slug: Slug
+        users: Number of users
   page_conditions:
     condition_answer_value_text: "“%{answer_value}”"
     condition_answer_value_text2: "‘%{answer_value}’"
@@ -1588,6 +1635,7 @@ en:
     non_crown_agreement_confirmation: You’ve agreed to the GOV.UK Forms agreement
     non_crown_agreement_new: GOV.UK Forms agreement
     not_found: Page not found
+    organisations: Organisations
     payment_link: Add a link to a payment page on GOV.UK Pay
     privacy_policy: Provide a link to privacy information for this form
     question_text: What’s your question?
