@@ -1,5 +1,10 @@
 {
   "features": {
+    "ghcr.io/devcontainer-community/devcontainer-features/neovim.io:1": {
+      "version": "1.0.3",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/neovim.io@sha256:534aa717abab63f4f0b78b572ece6bfbb2c47e6ae92ddb791af02076b5f37836",
+      "integrity": "sha256:534aa717abab63f4f0b78b572ece6bfbb2c47e6ae92ddb791af02076b5f37836"
+    },
     "ghcr.io/devcontainers/features/copilot-cli:1": {
       "version": "1.1.3",
       "resolved": "ghcr.io/devcontainers/features/copilot-cli@sha256:e10d091ae7ef9b8d2ed5f601d75f5a090bc04acbac1a26d4cd3c0d5edde4ea10",
