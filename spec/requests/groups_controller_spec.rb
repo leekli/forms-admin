@@ -66,7 +66,7 @@ RSpec.describe "/groups", type: :request do
       end
     end
 
-    let(:other_org) { create :organisation, id: 2, slug: "other-org" }
+    let(:other_org) { create :organisation, slug: "other-org" }
     let!(:other_org_trial_groups) { create_list :group, 3, organisation: other_org, status: :trial }
 
     context "when the user is not a super-admin" do
@@ -128,7 +128,7 @@ RSpec.describe "/groups", type: :request do
         let!(:other_org_active_groups) { create_list :group, 3, :active, organisation: other_org }
         let!(:other_org_upgrade_requested_groups) { create_list :group, 3, :upgrade_requested, organisation: other_org }
 
-        it "shows groups for organisation in query", :flaky do
+        it "shows groups for organisation in query" do
           get groups_url, params: { search: { organisation_id: other_org.id } }
           expect(assigns(:trial_groups)).to match_array(other_org_trial_groups)
           expect(assigns(:active_groups)).to match_array(other_org_active_groups)
