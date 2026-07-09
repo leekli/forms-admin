@@ -25,13 +25,25 @@ class OrganisationsController < WebController
 private
 
   def filtered_organisations
-    Organisation
+    scope = Organisation
       .by_name(filter_params[:name])
       .by_mou_signed(filter_params[:mou_signed])
-      .order(:name)
+
+    apply_sort(scope)
+  end
+
+  def apply_sort(scope)
+    case filter_params[:sort]
+    when "users"
+      scope.order_by_user_count
+    when "forms"
+      scope.order_by_form_count
+    else
+      scope.order(:name)
+    end
   end
 
   def filter_params
-    params[:filter]&.permit(:name, :mou_signed) || {}
+    params[:filter]&.permit(:name, :mou_signed, :sort) || {}
   end
 end

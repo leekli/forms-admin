@@ -80,6 +80,60 @@ RSpec.describe OrganisationsController, type: :request do
         expect(response.body).not_to include(organisation_with_mou.name)
       end
     end
+
+    context "when sorting" do
+      let!(:organisation_a) { create :organisation, name: "Alpha department", slug: "alpha-department" }
+      let!(:organisation_z) { create :organisation, name: "Zulu department", slug: "zulu-department", closed: true }
+
+      def organisation_row_order(response)
+        page = Capybara.string(response.body)
+        page.all("tbody tr td:first-child").map(&:text).map(&:strip)
+      end
+
+      before do
+        login_as_super_admin_user
+
+        create_list :user, 2, organisation: organisation_a
+        create :user, organisation: organisation_z
+
+        group = create :group, organisation: organisation_z
+        create :form, :with_group, group:
+      end
+
+      it "sorts by name ascending by default" do
+        get path
+
+        expect(organisation_row_order(response).first).to eq(organisation_a.name_with_abbreviation)
+      end
+
+      it "sorts by user count descending" do
+        get path, params: { filter: { sort: "users" } }
+
+        expect(organisation_row_order(response).first).to eq(organisation_a.name_with_abbreviation)
+      end
+
+      it "sorts by form count descending" do
+        get path, params: { filter: { sort: "forms" } }
+
+        expect(organisation_row_order(response).first).to eq(organisation_z.name_with_abbreviation)
+      end
+
+      it "falls back to name for an unknown sort option" do
+        get path, params: { filter: { sort: "malicious" } }
+
+        expect(organisation_row_order(response).first).to eq(organisation_a.name_with_abbreviation)
+      end
+
+      it "sorts while filtering by MOU signed at the same time" do
+        organisation_with_mou = create :organisation, :with_signed_mou, name: "Mike department", slug: "mike-department"
+
+        get path, params: { filter: { mou_signed: "true", sort: "users" } }
+
+        expect(response).to have_http_status(:ok)
+        expect(organisation_row_order(response)).to include(organisation_with_mou.name_with_abbreviation)
+        expect(organisation_row_order(response)).not_to include(organisation_a.name_with_abbreviation, organisation_z.name_with_abbreviation)
+      end
+    end
   end
 
   describe "#show" do

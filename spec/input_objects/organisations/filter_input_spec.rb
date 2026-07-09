@@ -27,6 +27,16 @@ RSpec.describe Organisations::FilterInput, type: :model do
     end
   end
 
+  describe "#sort_options" do
+    it "returns the correct options" do
+      expect(described_class.new.sort_options).to eq([
+        OpenStruct.new(label: I18n.t("organisations.index.filter.sort.name"), value: "name"),
+        OpenStruct.new(label: I18n.t("organisations.index.filter.sort.users"), value: "users"),
+        OpenStruct.new(label: I18n.t("organisations.index.filter.sort.forms"), value: "forms"),
+      ])
+    end
+  end
+
   describe "#mou_signed_options" do
     it "returns the correct options" do
       expect(described_class.new.mou_signed_options).to eq([

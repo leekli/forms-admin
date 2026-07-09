@@ -19,6 +19,15 @@
           label: { text: t('organisations.index.filter.mou_signed.label'), size: 's' },
           hint: { text: t('organisations.index.filter.mou_signed.hint') } %>
       </div>
+      <div class="govuk-grid-column-one-third">
+        <%= f.govuk_collection_select :sort,
+          @filter_input.sort_options,
+          :value,
+          :label,
+          class: ["govuk-!-width-full"],
+          label: { text: t('organisations.index.filter.sort.label'), size: 's' },
+          hint: { text: t('organisations.index.filter.sort.hint') } %>
+      </div>
     </div>
 
     <div class="govuk-grid-row govuk-!-padding-left-3 govuk-!-padding-right-3">
