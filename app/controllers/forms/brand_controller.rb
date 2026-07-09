@@ -1,12 +1,13 @@
 module Forms
   class BrandController < FormsController
+    before_action :check_user_has_permission
+    before_action :check_feature_flag
+
     def new
-      authorize current_form, :can_view_form?
       @brand_input = BrandInput.new(form: current_form).assign_form_values
     end
 
     def create
-      authorize current_form, :can_view_form?
       @brand_input = BrandInput.new(brand_input_params)
       previous_brand_id = current_form.brand_id
 
@@ -19,6 +20,14 @@ module Forms
     end
 
   private
+
+    def check_user_has_permission
+      authorize current_form, :can_view_form?
+    end
+
+    def check_feature_flag
+      raise NotFoundError unless FeatureService.new(group: current_form.group).enabled?(:custom_branding)
+    end
 
     def brand_input_params
       params.require(:forms_brand_input).permit(:brand_id).merge(form: current_form)

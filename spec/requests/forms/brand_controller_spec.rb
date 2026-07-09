@@ -4,7 +4,8 @@ RSpec.describe Forms::BrandController, type: :request do
   let(:form) { create(:form, :live, brand_id: "south-gloucestershire") }
   let(:brand_id) { "cheshire-east" }
 
-  let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:group) { create(:group, organisation: standard_user.organisation, custom_branding_enabled:) }
+  let(:custom_branding_enabled) { true }
 
   before do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -19,10 +20,31 @@ RSpec.describe Forms::BrandController, type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(I18n.t("brand_input.heading"))
     end
+
+    context "when the custom_branding feature is disabled" do
+      let(:custom_branding_enabled) { false }
+
+      it "returns 404" do
+        get(brand_path(form_id: form.id))
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "#create" do
     let(:params) { { forms_brand_input: { brand_id: } } }
+
+    context "when the custom_branding feature is disabled" do
+      let(:custom_branding_enabled) { false }
+
+      it "returns 404 and does not update the form" do
+        expect {
+          post(brand_path(form_id: form.id), params:)
+        }.not_to(change { form.reload.brand_id })
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
 
     context "when the brand is changed" do
       it "updates the form" do
