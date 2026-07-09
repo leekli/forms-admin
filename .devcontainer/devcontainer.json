@@ -14,7 +14,8 @@
       "version": "15"
     },
     "ghcr.io/stu-bell/devcontainer-features/claude-code:0": {},
-    "ghcr.io/devcontainers/features/copilot-cli:1": {}
+    "ghcr.io/devcontainers/features/copilot-cli:1": {},
+    "ghcr.io/devcontainer-community/devcontainer-features/neovim.io:1": {}
   },
 
   // Remove any stale Yarn apt source, then install native build dependencies for Ruby and PostgreSQL
@@ -88,7 +89,7 @@
         "editorconfig.editorconfig",
         "donjayamanne.githistory",
         "yzhang.markdown-all-in-one",
-        
+
         // AI tools
         "GitHub.copilot",
         "GitHub.copilot-chat",
