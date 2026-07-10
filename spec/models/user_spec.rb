@@ -58,6 +58,16 @@ describe User, type: :model do
       end
     end
 
+    context "when reassigning to a new, unsaved organisation" do
+      let(:user) { create(:user, organisation: create(:organisation)) }
+
+      it "is valid even though the new organisation is not yet persisted" do
+        user.organisation = build(:organisation)
+
+        expect(user).to be_valid
+      end
+    end
+
     context "when updating name" do
       let(:user) { create :user, :with_no_name }
 

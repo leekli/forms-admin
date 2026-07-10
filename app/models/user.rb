@@ -159,6 +159,6 @@ private
   end
 
   def requires_organisation?
-    organisation_id_was.present? || role_changed?(to: :organisation_admin)
+    organisation.blank? && (organisation_id_was.present? || role_changed?(to: :organisation_admin))
   end
 end
