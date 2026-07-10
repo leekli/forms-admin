@@ -1467,11 +1467,17 @@ en:
         clear_filter: Clear filter
         mou_signed:
           any: All organisations
-          hint: Filter by whether an MOU or agreement has been agreed
+          hint: Select MOU or agreement status
           label: MOU signed
         name:
-          hint: Enter full or partial name or abbreviation
+          hint: Enter name or abbreviation
           label: Name
+        sort:
+          forms: Forms (most first)
+          hint: Choose how to order the list
+          label: Sort by
+          name: Name (A to Z)
+          users: Users (most first)
         submit: Filter
       no_results: No organisations found.
       organisation_count:

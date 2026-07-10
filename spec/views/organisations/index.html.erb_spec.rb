@@ -55,6 +55,14 @@ describe "organisations/index.html.erb" do
     expect(rendered).to have_css(".app-scrolling-wrapper > table")
   end
 
+  it "contains a sort select in the filter bar" do
+    expect(rendered).to have_select("filter[sort]", options: [
+      I18n.t("organisations.index.filter.sort.name"),
+      I18n.t("organisations.index.filter.sort.users"),
+      I18n.t("organisations.index.filter.sort.forms"),
+    ])
+  end
+
   it "links each organisation name to its show page" do
     expect(rendered).to have_link(organisation.name_with_abbreviation, href: organisation_path(organisation))
     expect(rendered).to have_link(closed_organisation.name_with_abbreviation, href: organisation_path(closed_organisation))

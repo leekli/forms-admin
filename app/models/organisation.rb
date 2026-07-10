@@ -21,10 +21,20 @@ class Organisation < ApplicationRecord
   scope :by_mou_signed, lambda { |mou_signed|
     case mou_signed
     when "true"
-      joins(:mou_signatures).distinct
+      where(id: MouSignature.select(:organisation_id))
     when "false"
       where.missing(:mou_signatures)
     end
+  }
+
+  scope :order_by_user_count, lambda {
+    order(Arel.sql("(SELECT COUNT(*) FROM users WHERE users.organisation_id = organisations.id) DESC"))
+      .order(:name)
+  }
+
+  scope :order_by_form_count, lambda {
+    order(Arel.sql("(SELECT COUNT(*) FROM groups_form_ids INNER JOIN groups ON groups.id = groups_form_ids.group_id WHERE groups.organisation_id = organisations.id) DESC"))
+      .order(:name)
   }
 
   def name_with_abbreviation
