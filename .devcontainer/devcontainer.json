@@ -18,8 +18,8 @@
     "ghcr.io/devcontainer-community/devcontainer-features/neovim.io:1": {}
   },
 
-  // Remove any stale Yarn apt source, then install native build dependencies for Ruby and PostgreSQL
-  "updateContentCommand": "sudo find /etc/apt -maxdepth 2 -type f \\( -name '*yarn*' -o -name '*Yarn*' \\) -delete && sudo apt-get update && sudo apt-get install -y build-essential libpq-dev git",
+  // Remove any stale Yarn apt source, install native build dependencies, and patch the missing Neovim runtime assets
+  "updateContentCommand": "sudo find /etc/apt -maxdepth 2 -type f \\( -name '*yarn*' -o -name '*Yarn*' \\) -delete && sudo apt-get update && sudo apt-get install -y build-essential libpq-dev git && sudo mkdir -p /usr/local/share/nvim/runtime && sudo git clone --depth 1 --branch v0.12.4 https://github.com/neovim/neovim.git /tmp/neovim-src && sudo cp -r /tmp/neovim-src/runtime/* /usr/local/share/nvim/runtime/ && sudo rm -rf /tmp/neovim-src && echo \"vim.o.background = 'dark'\" >> ~/.config/nvim/init.lua || true",
 
   // Install Ruby and JS dependencies, then prepare the Rails database
   "postCreateCommand": "bundle install && npm install && ./bin/rails db:prepare",
