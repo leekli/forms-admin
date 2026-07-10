@@ -83,6 +83,7 @@ RSpec.describe OrganisationsController, type: :request do
 
     context "when sorting" do
       let!(:organisation_a) { create :organisation, name: "Alpha department", slug: "alpha-department" }
+      let!(:organisation_n) { create :organisation, name: "November department", slug: "november-department" }
       let!(:organisation_z) { create :organisation, name: "Zulu department", slug: "zulu-department", closed: true }
 
       def organisation_row_order(response)
@@ -93,10 +94,10 @@ RSpec.describe OrganisationsController, type: :request do
       before do
         login_as_super_admin_user
 
-        create_list :user, 2, organisation: organisation_a
-        create :user, organisation: organisation_z
+        create_list :user, 3, organisation: organisation_z
+        create :user, organisation: organisation_a
 
-        group = create :group, organisation: organisation_z
+        group = create :group, organisation: organisation_n
         create :form, :with_group, group:
       end
 
@@ -109,13 +110,13 @@ RSpec.describe OrganisationsController, type: :request do
       it "sorts by user count descending" do
         get path, params: { filter: { sort: "users" } }
 
-        expect(organisation_row_order(response).first).to eq(organisation_a.name_with_abbreviation)
+        expect(organisation_row_order(response).first).to eq(organisation_z.name_with_abbreviation)
       end
 
       it "sorts by form count descending" do
         get path, params: { filter: { sort: "forms" } }
 
-        expect(organisation_row_order(response).first).to eq(organisation_z.name_with_abbreviation)
+        expect(organisation_row_order(response).first).to eq(organisation_n.name_with_abbreviation)
       end
 
       it "falls back to name for an unknown sort option" do
@@ -131,7 +132,7 @@ RSpec.describe OrganisationsController, type: :request do
 
         expect(response).to have_http_status(:ok)
         expect(organisation_row_order(response)).to include(organisation_with_mou.name_with_abbreviation)
-        expect(organisation_row_order(response)).not_to include(organisation_a.name_with_abbreviation, organisation_z.name_with_abbreviation)
+        expect(organisation_row_order(response)).not_to include(organisation_a.name_with_abbreviation, organisation_n.name_with_abbreviation, organisation_z.name_with_abbreviation)
       end
     end
   end
