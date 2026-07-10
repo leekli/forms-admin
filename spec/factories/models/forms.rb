@@ -29,11 +29,11 @@ FactoryBot.define do
 
     trait :with_group do
       transient do
-        group { nil }
+        group { association :group }
       end
 
       after(:build) do |form, evaluator|
-        g = evaluator.group || FactoryBot.create(:group)
+        g = evaluator.group
         form.instance_variable_set(:@associated_group, g)
         form.define_singleton_method(:group) { g }
       end
