@@ -134,8 +134,17 @@ RSpec.describe OrganisationsController, type: :request do
         expect(organisation_row_order(response).first).to eq(organisation_z.name_with_abbreviation)
       end
 
-      it "sorts by form count descending" do
-        get path, params: { filter: { sort: "forms" } }
+      it "sorts by live form count descending" do
+        group = create :group, organisation: organisation_z
+        create(:form, :live, :with_group, group:)
+
+        get path, params: { filter: { sort: "live_forms" } }
+
+        expect(organisation_row_order(response).first).to eq(organisation_z.name_with_abbreviation)
+      end
+
+      it "sorts by draft form count descending" do
+        get path, params: { filter: { sort: "draft_forms" } }
 
         expect(organisation_row_order(response).first).to eq(organisation_n.name_with_abbreviation)
       end

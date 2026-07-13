@@ -63,7 +63,8 @@ describe "organisations/index.html.erb" do
     expect(rendered).to have_select("filter[sort]", options: [
       I18n.t("organisations.index.filter.sort.name"),
       I18n.t("organisations.index.filter.sort.users"),
-      I18n.t("organisations.index.filter.sort.forms"),
+      I18n.t("organisations.index.filter.sort.live_forms"),
+      I18n.t("organisations.index.filter.sort.draft_forms"),
       I18n.t("organisations.index.filter.sort.agreement_date"),
     ])
   end

@@ -45,8 +45,10 @@ private
     case filter_params[:sort]
     when "users"
       scope.order_by_user_count
-    when "forms"
-      scope.order_by_form_count
+    when "live_forms"
+      scope.order_by_live_form_count
+    when "draft_forms"
+      scope.order_by_draft_form_count
     when "agreement_date"
       scope.order_by_first_agreement_date
     else

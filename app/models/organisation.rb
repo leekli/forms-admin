@@ -36,8 +36,13 @@ class Organisation < ApplicationRecord
       .order(:name)
   }
 
-  scope :order_by_form_count, lambda {
-    order(Arel.sql("(SELECT COUNT(*) FROM groups_form_ids INNER JOIN groups ON groups.id = groups_form_ids.group_id WHERE groups.organisation_id = organisations.id) DESC"))
+  scope :order_by_live_form_count, lambda {
+    order(Arel.sql("(SELECT COUNT(*) FROM groups_form_ids INNER JOIN groups ON groups.id = groups_form_ids.group_id INNER JOIN forms ON forms.id = groups_form_ids.form_id WHERE groups.organisation_id = organisations.id AND forms.state IN ('live', 'live_with_draft')) DESC"))
+      .order(:name)
+  }
+
+  scope :order_by_draft_form_count, lambda {
+    order(Arel.sql("(SELECT COUNT(*) FROM groups_form_ids INNER JOIN groups ON groups.id = groups_form_ids.group_id INNER JOIN forms ON forms.id = groups_form_ids.form_id WHERE groups.organisation_id = organisations.id AND forms.state = 'draft') DESC"))
       .order(:name)
   }
 

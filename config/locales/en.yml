@@ -1510,9 +1510,10 @@ en:
           label: Name
         sort:
           agreement_date: Date first agreement signed (newest first)
-          forms: Forms (most first)
+          draft_forms: Draft forms (most first)
           hint: Choose how to order the list
           label: Sort by
+          live_forms: Live forms (most first)
           name: Name (A to Z)
           users: Users (most first)
         submit: Filter
