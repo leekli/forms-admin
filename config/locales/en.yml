@@ -1543,10 +1543,11 @@ en:
       summary:
         closed: Closed
         created_at: Created
-        forms: Number of forms
+        draft_forms: Number of draft forms
         govuk_content_id: GOV.UK content ID
         groups: Number of groups
         internal: Internal
+        live_forms: Number of live forms
         slug: Slug
         users: Number of users
   page_conditions:

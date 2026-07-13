@@ -37,8 +37,13 @@
       end
 
       summary_list.with_row do |row|
-        row.with_key { t('organisations.show.summary.forms') }
-        row.with_value { @organisation.group_forms.count.to_s }
+        row.with_key { t('organisations.show.summary.live_forms') }
+        row.with_value { @organisation.group_forms.joins(:form).where(forms: { state: %w[live live_with_draft] }).count.to_s }
+      end
+
+      summary_list.with_row do |row|
+        row.with_key { t('organisations.show.summary.draft_forms') }
+        row.with_value { @organisation.group_forms.joins(:form).where(forms: { state: "draft" }).count.to_s }
       end
 
       summary_list.with_row do |row|
