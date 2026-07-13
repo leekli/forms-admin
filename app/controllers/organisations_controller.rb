@@ -42,6 +42,8 @@ private
       scope.order_by_user_count
     when "forms"
       scope.order_by_form_count
+    when "agreement_date"
+      scope.order_by_first_agreement_date
     else
       scope.order(:name)
     end

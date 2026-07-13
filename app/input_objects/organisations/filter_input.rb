@@ -11,6 +11,7 @@ module Organisations
         OpenStruct.new(label: I18n.t("organisations.index.filter.sort.name"), value: "name"),
         OpenStruct.new(label: I18n.t("organisations.index.filter.sort.users"), value: "users"),
         OpenStruct.new(label: I18n.t("organisations.index.filter.sort.forms"), value: "forms"),
+        OpenStruct.new(label: I18n.t("organisations.index.filter.sort.agreement_date"), value: "agreement_date"),
       ]
     end
 

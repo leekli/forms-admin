@@ -39,6 +39,11 @@ class Organisation < ApplicationRecord
       .order(:name)
   }
 
+  scope :order_by_first_agreement_date, lambda {
+    order(Arel.sql("(SELECT MIN(created_at) FROM mou_signatures WHERE mou_signatures.organisation_id = organisations.id) DESC NULLS LAST"))
+      .order(:name)
+  }
+
   def name_with_abbreviation
     if abbreviation.present? && abbreviation != name
       "#{name} (#{abbreviation})"

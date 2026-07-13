@@ -132,6 +132,17 @@ RSpec.describe OrganisationsController, type: :request do
         expect(organisation_row_order(response).first).to eq(organisation_n.name_with_abbreviation)
       end
 
+      it "sorts by first agreement signed date descending, organisations without an agreement last" do
+        create :mou_signature_for_organisation, organisation: organisation_n, created_at: 1.year.ago
+        create :mou_signature_for_organisation, organisation: organisation_z, created_at: 1.week.ago
+
+        get path, params: { filter: { sort: "agreement_date" } }
+
+        rows = organisation_row_order(response)
+        expect(rows.index(organisation_z.name_with_abbreviation)).to be < rows.index(organisation_n.name_with_abbreviation)
+        expect(rows.index(organisation_n.name_with_abbreviation)).to be < rows.index(organisation_a.name_with_abbreviation)
+      end
+
       it "falls back to name for an unknown sort option" do
         get path, params: { filter: { sort: "malicious" } }
 
