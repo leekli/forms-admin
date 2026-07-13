@@ -105,6 +105,27 @@ class GroupsController < WebController
     render :move
   end
 
+  # GET /groups/1/feature-flags
+  def feature_flags
+    authorize @group, :manage_feature_flags?
+
+    @feature_flags_input = Groups::FeatureFlagsInput.new(group: @group).assign_group_values
+  end
+
+  # POST /groups/1/feature-flags
+  def update_feature_flags
+    authorize @group, :manage_feature_flags?
+
+    @feature_flags_input = Groups::FeatureFlagsInput.new(feature_flags_input_params)
+
+    if @feature_flags_input.submit
+      success_message = t("groups.success_messages.feature_flags") if @feature_flags_input.flags_changed?
+      redirect_to @group, success: success_message, status: :see_other
+    else
+      render :feature_flags, status: :unprocessable_content
+    end
+  end
+
   # GET /groups/1/delete
   def delete
     authorize @group
@@ -199,6 +220,12 @@ private
   # Only allow a list of trusted parameters through.
   def group_params
     params.require(:group).permit(:name, :organisation_id)
+  end
+
+  def feature_flags_input_params
+    # When every flag is already enabled the form has no enabled inputs, so the
+    # input params may be missing entirely.
+    params.fetch(:groups_feature_flags_input, {}).permit(*Group.feature_flag_attributes).merge(group: @group)
   end
 
   def confirm_upgrade_input_params
