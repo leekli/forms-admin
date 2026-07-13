@@ -13,7 +13,11 @@ class OrganisationsController < WebController
     organisation_ids = @organisations.map(&:id)
     @user_counts = User.where(organisation_id: organisation_ids).group(:organisation_id).count
     @form_counts = GroupForm.joins(:group).where(groups: { organisation_id: organisation_ids }).reorder(nil).group("groups.organisation_id").count
-    @organisation_ids_with_mou = MouSignature.where(organisation_id: organisation_ids).distinct.pluck(:organisation_id).to_set
+    @agreement_types = MouSignature.where(organisation_id: organisation_ids)
+                                   .distinct
+                                   .pluck(:organisation_id, :agreement_type)
+                                   .group_by(&:first)
+                                   .transform_values { |pairs| pairs.map(&:last).sort }
   end
 
   def show

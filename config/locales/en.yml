@@ -1472,6 +1472,7 @@ en:
       'false': 'No'
       'true': 'Yes'
     index:
+      agreement_type_none: None
       filter:
         clear_filter: Clear filter
         mou_signed:
@@ -1495,8 +1496,8 @@ en:
       showing_count: Showing %{from} to %{to} of %{count} organisations
       table_caption: All organisations
       table_headings:
+        agreement_type: Agreement type
         forms: Forms
-        mou_signed: MOU signed
         name: Name
         users: Users
     show:
