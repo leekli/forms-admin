@@ -1472,12 +1472,14 @@ en:
       'false': 'No'
       'true': 'Yes'
     index:
+      agreement_type_none: None
       filter:
-        clear_filter: Clear filter
-        mou_signed:
+        agreement_type:
           any: All organisations
           hint: Select MOU or agreement status
-          label: MOU signed
+          label: Agreement type
+          none: No agreement signed
+        clear_filter: Clear filter
         name:
           hint: Enter name or abbreviation
           label: Name
@@ -1495,8 +1497,8 @@ en:
       showing_count: Showing %{from} to %{to} of %{count} organisations
       table_caption: All organisations
       table_headings:
+        agreement_type: Agreement type
         forms: Forms
-        mou_signed: MOU signed
         name: Name
         users: Users
     show:
