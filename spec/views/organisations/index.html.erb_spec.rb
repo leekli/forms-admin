@@ -62,6 +62,7 @@ describe "organisations/index.html.erb" do
       I18n.t("organisations.index.filter.sort.name"),
       I18n.t("organisations.index.filter.sort.users"),
       I18n.t("organisations.index.filter.sort.forms"),
+      I18n.t("organisations.index.filter.sort.agreement_date"),
     ])
   end
 

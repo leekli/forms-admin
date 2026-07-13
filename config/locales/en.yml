@@ -1485,6 +1485,7 @@ en:
           hint: Enter name or abbreviation
           label: Name
         sort:
+          agreement_date: Date first agreement signed (newest first)
           forms: Forms (most first)
           hint: Choose how to order the list
           label: Sort by

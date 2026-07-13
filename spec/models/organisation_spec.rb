@@ -105,6 +105,35 @@ RSpec.describe Organisation, type: :model do
         expect(described_class.by_agreement_type("malicious")).to contain_exactly(organisation_with_crown_mou, organisation_with_non_crown_agreement, organisation_without_agreement)
       end
     end
+
+    describe ".order_by_first_agreement_date" do
+      let!(:organisation_signed_last_week) { create :organisation, slug: "org-signed-last-week" }
+      let!(:organisation_signed_last_year) { create :organisation, slug: "org-signed-last-year" }
+      let!(:organisation_without_agreement) { create :organisation, slug: "org-without-agreement" }
+
+      before do
+        create :mou_signature_for_organisation, organisation: organisation_signed_last_week, created_at: 1.week.ago
+        create :mou_signature_for_organisation, organisation: organisation_signed_last_year, agreement_type: :non_crown, created_at: 1.year.ago
+      end
+
+      it "orders organisations by first agreement signed, newest first, without an agreement last" do
+        expect(described_class.order_by_first_agreement_date).to eq [
+          organisation_signed_last_week,
+          organisation_signed_last_year,
+          organisation_without_agreement,
+        ]
+      end
+
+      it "uses the earliest signature when an organisation has more than one" do
+        create :mou_signature_for_organisation, organisation: organisation_signed_last_year, created_at: 1.day.ago
+
+        expect(described_class.order_by_first_agreement_date).to eq [
+          organisation_signed_last_week,
+          organisation_signed_last_year,
+          organisation_without_agreement,
+        ]
+      end
+    end
   end
 
   describe "#name_with_abbreviation" do
