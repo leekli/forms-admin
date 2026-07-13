@@ -31,10 +31,11 @@ describe "organisations/index.html.erb" do
 
   it "contains a filter form" do
     expect(rendered).to have_field("filter[name]")
-    expect(rendered).to have_select("filter[mou_signed]", options: [
-      I18n.t("organisations.index.filter.mou_signed.any"),
-      I18n.t("organisations.boolean.true"),
-      I18n.t("organisations.boolean.false"),
+    expect(rendered).to have_select("filter[agreement_type]", options: [
+      I18n.t("organisations.index.filter.agreement_type.any"),
+      I18n.t("mou_signatures.index.agreement_type.crown"),
+      I18n.t("mou_signatures.index.agreement_type.non_crown"),
+      I18n.t("organisations.index.filter.agreement_type.none"),
     ])
     expect(rendered).to have_button(I18n.t("organisations.index.filter.submit"))
   end

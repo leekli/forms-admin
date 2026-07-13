@@ -18,11 +18,13 @@ class Organisation < ApplicationRecord
     end
   }
 
-  scope :by_mou_signed, lambda { |mou_signed|
-    case mou_signed
-    when "true"
-      where(id: MouSignature.select(:organisation_id))
-    when "false"
+  scope :by_agreement_type, lambda { |agreement_type|
+    case agreement_type
+    when "crown"
+      where(id: MouSignature.crown.select(:organisation_id))
+    when "non_crown"
+      where(id: MouSignature.non_crown.select(:organisation_id))
+    when "none"
       where.missing(:mou_signatures)
     end
   }

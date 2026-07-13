@@ -31,7 +31,7 @@ private
   def filtered_organisations
     scope = Organisation
       .by_name(filter_params[:name])
-      .by_mou_signed(filter_params[:mou_signed])
+      .by_agreement_type(filter_params[:agreement_type])
 
     apply_sort(scope)
   end
@@ -48,6 +48,6 @@ private
   end
 
   def filter_params
-    params[:filter]&.permit(:name, :mou_signed, :sort) || {}
+    params[:filter]&.permit(:name, :agreement_type, :sort) || {}
   end
 end

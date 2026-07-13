@@ -1474,11 +1474,12 @@ en:
     index:
       agreement_type_none: None
       filter:
-        clear_filter: Clear filter
-        mou_signed:
+        agreement_type:
           any: All organisations
           hint: Select MOU or agreement status
-          label: MOU signed
+          label: Agreement type
+          none: No agreement signed
+        clear_filter: Clear filter
         name:
           hint: Enter name or abbreviation
           label: Name
