@@ -1524,7 +1524,8 @@ en:
       table_caption: All organisations
       table_headings:
         agreement_type: Agreement type
-        forms: Forms
+        draft_forms: Draft forms
+        live_forms: Live forms
         name: Name
         users: Users
     show:

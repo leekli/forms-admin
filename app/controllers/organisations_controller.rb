@@ -12,7 +12,12 @@ class OrganisationsController < WebController
 
     organisation_ids = @organisations.map(&:id)
     @user_counts = User.where(organisation_id: organisation_ids).group(:organisation_id).count
-    @form_counts = GroupForm.joins(:group).where(groups: { organisation_id: organisation_ids }).reorder(nil).group("groups.organisation_id").count
+    @live_form_counts = GroupForm.joins(:group, :form)
+                                 .where(groups: { organisation_id: organisation_ids }, forms: { state: %w[live live_with_draft] })
+                                 .reorder(nil).group("groups.organisation_id").count
+    @draft_form_counts = GroupForm.joins(:group, :form)
+                                  .where(groups: { organisation_id: organisation_ids }, forms: { state: "draft" })
+                                  .reorder(nil).group("groups.organisation_id").count
     @agreement_types = MouSignature.where(organisation_id: organisation_ids)
                                    .distinct
                                    .pluck(:organisation_id, :agreement_type)

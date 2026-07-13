@@ -28,7 +28,9 @@ RSpec.describe OrganisationsController, type: :request do
 
     context "when the user is a super admin" do
       before do
-        create(:form, :with_group, group:)
+        create(:form, :live, :with_group, group:)
+        create_list(:form, 2, :with_group, group:)
+        create(:form, :archived, :with_group, group:)
 
         login_as_super_admin_user
 
@@ -45,10 +47,16 @@ RSpec.describe OrganisationsController, type: :request do
         expect(response.body).to include(closed_organisation.name)
       end
 
-      it "shows the number of forms in each organisation" do
+      it "shows the number of live forms in each organisation, not counting archived forms" do
         page = Capybara.string(response.body)
         expect(page).to have_xpath "//tbody/tr[2]/td[3]", text: "1"
         expect(page).to have_xpath "//tbody/tr[1]/td[3]", text: "0"
+      end
+
+      it "shows the number of draft forms in each organisation, not counting archived forms" do
+        page = Capybara.string(response.body)
+        expect(page).to have_xpath "//tbody/tr[2]/td[4]", text: "2"
+        expect(page).to have_xpath "//tbody/tr[1]/td[4]", text: "0"
       end
     end
 
