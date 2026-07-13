@@ -199,7 +199,8 @@ private
     if @step.routing_conditions.length == 1
       print_route(@step.routing_conditions.first)
     else
-      html_ordered_list(@step.routing_conditions.map { |condition| print_route(condition) })
+      ordered_conditions = ordered_routing_conditions(@step.routing_conditions)
+      html_ordered_list(ordered_conditions.map { |condition| print_route(condition) })
     end
   end
 
@@ -295,5 +296,10 @@ private
       sorted_condition_group = condition_group.in_order_of(:answer_value, answer_order, filter: false)
       [goto_page_position, sorted_condition_group]
     }.sort_by { |goto_page_position, _| goto_page_position || Float::INFINITY }
+  end
+
+  def ordered_routing_conditions(conditions)
+    answer_order = @step.answer_settings.selection_options.map(&:value) || []
+    conditions.sort_by { |condition| answer_order.index(condition.answer_value) || Float::INFINITY }
   end
 end

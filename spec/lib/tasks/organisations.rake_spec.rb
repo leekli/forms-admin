@@ -343,7 +343,7 @@ RSpec.describe "organisations.rake", type: :task do
 
     let!(:organisation) { create :organisation, slug: "test-org" }
 
-    it "logs the organisation domains", :flaky do
+    it "logs the organisation domains" do
       create :organisation_domain, organisation:, domain: "example.gov.uk"
       create :organisation_domain, organisation:, domain: "example.org"
 
