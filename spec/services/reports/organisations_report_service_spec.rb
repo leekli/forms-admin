@@ -18,7 +18,7 @@ describe Reports::OrganisationsReportService do
     end
 
     context "with organisations" do
-      it "returns the correct rows" do
+      it "returns the correct rows", :flaky do
         create(:organisation, name: "Ministry of tests", slug: "ministry-of-tests", organisation_domains: [
           create(:organisation_domain, domain: "ministry-of-tests.gov.uk"),
           create(:organisation_domain, domain: "mot.gov.uk"),

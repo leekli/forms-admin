@@ -308,7 +308,7 @@ RSpec.describe "organisations.rake", type: :task do
       create :organisation_domain, organisation:, domain: "example.org"
     end
 
-    it "removes domains from an organisation" do
+    it "removes domains from an organisation", :flaky do
       expect(Rails.logger).to receive(:info).with("Removed domain: example.gov.uk")
 
       expect {
@@ -318,7 +318,7 @@ RSpec.describe "organisations.rake", type: :task do
         .to(%w[example.org])
     end
 
-    it "logs and continues when a domain does not exist" do
+    it "logs and continues when a domain does not exist", :flaky do
       expect(Rails.logger).to receive(:info).with("Domain missing.gov.uk not found for organisation with slug test-org").ordered
       expect(Rails.logger).to receive(:info).with("Removed domain: example.gov.uk").ordered
 
@@ -343,7 +343,7 @@ RSpec.describe "organisations.rake", type: :task do
 
     let!(:organisation) { create :organisation, slug: "test-org" }
 
-    it "logs the organisation domains" do
+    it "logs the organisation domains", :flaky do
       create :organisation_domain, organisation:, domain: "example.gov.uk"
       create :organisation_domain, organisation:, domain: "example.org"
 

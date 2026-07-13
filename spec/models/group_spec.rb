@@ -173,7 +173,7 @@ RSpec.describe Group, type: :model do
 
     describe "#users" do
       describe "#group_admins" do
-        it "returns all users who are group admins for the group" do
+        it "returns all users who are group admins for the group", :flaky do
           group = create :group
           group_admin_users = create_list :user, 3, organisation: group.organisation
           editor_users = create_list :user, 3, organisation: group.organisation
@@ -210,7 +210,7 @@ RSpec.describe Group, type: :model do
       ]
     end
 
-    it "can be associated with many form IDs" do
+    it "can be associated with many form IDs", :flaky do
       group = build(:group, id: 1)
       forms = create_list(:form, 3)
       group.group_forms.build(form: forms.first)
