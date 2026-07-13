@@ -135,6 +135,9 @@ group :test do
   # Enable running the specs in parallel (and optionally with Spring)
   gem "parallel_rspec"
   gem "spring-prspec"
+
+  # Look for tests which rely on implicit ordering of DB queries
+  gem "unreliable"
 end
 
 gem "mobility", "~> 1.3"
