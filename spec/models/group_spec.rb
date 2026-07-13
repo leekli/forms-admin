@@ -173,7 +173,7 @@ RSpec.describe Group, type: :model do
 
     describe "#users" do
       describe "#group_admins" do
-        it "returns all users who are group admins for the group", :flaky do
+        it "returns all users who are group admins for the group" do
           group = create :group
           group_admin_users = create_list :user, 3, organisation: group.organisation
           editor_users = create_list :user, 3, organisation: group.organisation
@@ -185,7 +185,7 @@ RSpec.describe Group, type: :model do
             Membership.create!(group:, user:, role: :editor, added_by: group.creator)
           end
 
-          expect(group.users.group_admins).to eq group_admin_users
+          expect(group.users.group_admins).to match_array(group_admin_users)
         end
       end
     end
@@ -210,7 +210,7 @@ RSpec.describe Group, type: :model do
       ]
     end
 
-    it "can be associated with many form IDs", :flaky do
+    it "can be associated with many form IDs" do
       group = build(:group, id: 1)
       forms = create_list(:form, 3)
       group.group_forms.build(form: forms.first)
@@ -218,11 +218,7 @@ RSpec.describe Group, type: :model do
       group.group_forms.build(form: forms.third)
       group.save!
 
-      expect(described_class.find(1).group_forms).to eq [
-        GroupForm.build(form: forms.first, group_id: 1),
-        GroupForm.build(form: forms.second, group_id: 1),
-        GroupForm.build(form: forms.third, group_id: 1),
-      ]
+      expect(described_class.find(1).group_forms).to contain_exactly(GroupForm.build(form: forms.first, group_id: 1), GroupForm.build(form: forms.second, group_id: 1), GroupForm.build(form: forms.third, group_id: 1))
     end
 
     it "is associated with a form through the form ID" do
