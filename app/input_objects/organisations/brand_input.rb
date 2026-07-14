@@ -23,7 +23,7 @@ module Organisations
   private
 
     def brand_is_available
-      errors.add(:brand_id, :inclusion) if brand.nil? || organisation.brands.exists?(brand.id)
+      errors.add(:brand_id, :inclusion) unless available_brands.exists?(id: brand_id)
     end
   end
 end
