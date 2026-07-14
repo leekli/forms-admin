@@ -36,16 +36,7 @@ private
 
   def brand_input_params
     params.require(:organisations_brand_input).permit(:brand_id).merge(organisation:).tap do |p|
-      # We have to take steps to detect when the autocomplete component is
-      # empty. We use the value of rawAttribute, which is the text input when JS
-      # is enabled. When it's empty, the user has cleared it.
-      if p.key?(:brand_id) && brand_id_raw && brand_id_raw.empty?
-        p[:brand_id] = nil
-      end
+      clear_param_if_autocomplete_empty(p, :brand_id, params.dig(:organisations_brand_input, :brand_id_raw))
     end
-  end
-
-  def brand_id_raw
-    params.dig(:organisations_brand_input, :brand_id_raw)
   end
 end
