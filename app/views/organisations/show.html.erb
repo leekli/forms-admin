@@ -107,8 +107,8 @@
     <% end %>
 
     <h2 class="govuk-heading-m"><%= t("organisations.show.brands.heading") %></h2>
+    <p class="govuk-body"><%= t("organisations.show.brands.guidance") %></p>
     <% if @organisation.brands.any? %>
-      <p class="govuk-body"><%= t("organisations.show.brands.guidance") %></p>
       <%= render ScrollingWrapperComponent::View.new(aria_label: t("organisations.show.brands.heading")) do %>
         <%= govuk_table do |table| %>
           <%= table.with_head do |head|
