@@ -166,6 +166,7 @@ RSpec.describe OrganisationsController, type: :request do
     let(:path) { organisation_path(organisation) }
 
     let!(:organisation_domain) { create :organisation_domain, organisation: }
+    let!(:organisation_brand) { create :organisation_brand, organisation: }
 
     include_examples "unauthorized user is forbidden"
 
@@ -187,6 +188,12 @@ RSpec.describe OrganisationsController, type: :request do
         expect(response.body).to include(organisation.admin_users.first.email)
         expect(response.body).to include(I18n.t("mou_signatures.index.agreement_type.#{organisation.mou_signatures.first.agreement_type}"))
         expect(response.body).to include(organisation_domain.domain)
+      end
+
+      it "shows the organisation's brands with a link to add a brand" do
+        expect(response.body).to include(organisation_brand.brand.name)
+        expect(response.body).to include(I18n.t("organisations.show.brands.add"))
+        expect(response.body).to include(new_organisation_brand_path(organisation))
       end
     end
   end

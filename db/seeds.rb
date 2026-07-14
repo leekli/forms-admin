@@ -21,6 +21,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   )
   gds.organisation_domains.create! domain: "digital.cabinet-office.gov.uk"
   gds.organisation_domains.create! domain: "dsit.gov.uk"
+  gds.brands = Brand.all
 
   # Create default super-admin
   default_user = User.create!({ email: "example@example.com",
