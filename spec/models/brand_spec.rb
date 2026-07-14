@@ -15,6 +15,19 @@ RSpec.describe Brand, type: :model do
     expect(brand.errors).to be_of_kind(:name, :blank)
   end
 
+  it "is invalid when the slug is not kebab-case" do
+    ["Testshire", "testshire council", "testshire_council", " testshire", "testshire-"].each do |slug|
+      brand.slug = slug
+      expect(brand).to be_invalid
+      expect(brand.errors).to be_of_kind(:slug, :invalid)
+    end
+  end
+
+  it "is valid with a kebab-case slug" do
+    brand.slug = "testshire-east-2"
+    expect(brand).to be_valid
+  end
+
   it "is invalid with a duplicate slug" do
     create(:brand, slug: "duplicate-brand")
     brand.slug = "duplicate-brand"

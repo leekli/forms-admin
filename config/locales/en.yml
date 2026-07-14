@@ -148,6 +148,10 @@ en:
   activerecord:
     errors:
       models:
+        brand:
+          attributes:
+            slug:
+              invalid: Enter a slug in the correct format, like example-council
         draft_question:
           attributes:
             hint_text:
