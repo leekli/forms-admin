@@ -6,6 +6,11 @@ FactoryBot.define do
     delivery_schedule { "immediate" }
     delivery_method { "email" }
 
+    trait :immediate_email do
+      delivery_schedule { "immediate" }
+      delivery_method { "email" }
+    end
+
     trait :batch_email do
       delivery_method { "email" }
       formats { %w[csv] }

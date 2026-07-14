@@ -85,7 +85,32 @@ namespace :forms do
       supported_formats = %w[csv json]
       abort "submission_format must be one of #{supported_formats.join(', ')}" unless submission_format.all? { supported_formats.include? it }
 
-      set_submission_type(args[:form_id], "email", submission_format)
+      form_id = args[:form_id]
+      Rails.logger.info("Setting submission_type to email with submission_format #{submission_format} for form: #{form_id}")
+
+      form = Form.find(form_id)
+      form.submission_type = "email"
+      form.submission_format = submission_format
+
+      delivery_configuration = form.delivery_configurations.find_or_initialize_by(delivery_method: :email, delivery_schedule: :immediate)
+      delivery_configuration.formats = submission_format
+      delivery_configuration.save!
+
+      form.delivery_configurations.where(delivery_method: :s3).destroy_all
+      form.save!
+
+      if form.is_live?
+        form_document = form.live_form_document
+        content = form_document.content
+
+        content[:submission_type] = "email"
+        content[:submission_format] = submission_format
+        content[:delivery_configurations] = form.delivery_configurations.map(&:as_json)
+
+        form_document.save!
+      end
+
+      Rails.logger.info("Set submission_type to email with submission_format #{submission_format} for form: #{form_id}")
     end
 
     desc "Set submission_type to s3"
@@ -109,19 +134,30 @@ namespace :forms do
       form.s3_bucket_name = args[:s3_bucket_name]
       form.s3_bucket_aws_account_id = args[:s3_bucket_aws_account_id]
       form.s3_bucket_region = args[:s3_bucket_region]
+
+      delivery_configuration = form.delivery_configurations.find_or_initialize_by(delivery_method: :s3, delivery_schedule: :immediate)
+      delivery_configuration.formats = submission_format
+      delivery_configuration.save!
+
+      # For now, disable email delivery per submission. After we've migrated to using the DeliveryConfigurations in
+      # forms-runner we can allow enabling both email and s3.
+      form.delivery_configurations.where(delivery_method: :email, delivery_schedule: :immediate).destroy_all
+
       form.save!
 
       if form.is_live?
-        form_document = form.live_form_document
-        content = form_document.content
+        form.form_documents.where(tag: "live").find_each do |form_document|
+          content = form_document.content
 
-        content[:submission_type] = submission_type
-        content[:submission_format] = submission_format
-        content[:s3_bucket_name] = args[:s3_bucket_name]
-        content[:s3_bucket_aws_account_id] = args[:s3_bucket_aws_account_id]
-        content[:s3_bucket_region] = args[:s3_bucket_region]
+          content[:submission_type] = submission_type
+          content[:submission_format] = submission_format
+          content[:s3_bucket_name] = args[:s3_bucket_name]
+          content[:s3_bucket_aws_account_id] = args[:s3_bucket_aws_account_id]
+          content[:s3_bucket_region] = args[:s3_bucket_region]
+          content[:delivery_configurations] = form.delivery_configurations.map(&:as_json)
 
-        form_document.save!
+          form_document.save!
+        end
       end
 
       Rails.logger.info("Set submission_type to #{submission_type} and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")
@@ -166,27 +202,6 @@ end
 
 def fmt_group(group)
   "group #{group.external_id} (\"#{group.name}\", #{group.organisation.name}, #{group.creator&.name || 'GOV.UK Forms Team'})"
-end
-
-def set_submission_type(form_id, submission_type, submission_format)
-  Rails.logger.info("Setting submission_type to #{submission_type} with submission_format #{submission_format} for form: #{form_id}")
-
-  form = Form.find(form_id)
-  form.submission_type = submission_type
-  form.submission_format = submission_format
-  form.save!
-
-  if form.is_live?
-    form_document = form.live_form_document
-    content = form_document.content
-
-    content[:submission_type] = submission_type
-    content[:submission_format] = submission_format
-
-    form_document.save!
-  end
-
-  Rails.logger.info("Set submission_type to #{submission_type} with submission_format #{submission_format} for form: #{form_id}")
 end
 
 def validate_email(email)
