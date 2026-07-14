@@ -77,7 +77,7 @@ RSpec.describe Mailchimp::ListSyncService do
     let(:user_with_access_admin) { create(:user, email: "admin_user@example.com", organisation: signed_mou_org) }
     let(:user_without_access) { create(:user, email: "inactive_user@example.com", has_access: false, organisation: signed_mou_org) }
     let(:user_access_and_admin_with_mou) { create(:user, email: "admin_mou_user@example.com", organisation: signed_mou_org) }
-    let(:non_crown_org) { create(:organisation, id: 2, slug: "non-crown-org") }
+    let(:non_crown_org) { create(:organisation, slug: "non-crown-org") }
     let(:user_that_signed_non_crown_agreement) { create(:user, organisation: non_crown_org) }
     let(:not_org_admin_that_signed_non_crown_agreement) { create(:user, organisation: non_crown_org) }
     let(:org_admin_for_non_crown_org) { create(:user, organisation: non_crown_org) }
