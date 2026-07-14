@@ -71,8 +71,8 @@ Rails.application.routes.draw do
     post "/declaration-preview" => "forms/declaration#render_preview", as: :declaration_render_preview
     get "/payment-link" => "forms/payment_link#new", as: :payment_link
     post "/payment-link" => "forms/payment_link#create", as: :payment_link_create
-    get "/brand" => "forms/brand#new", as: :brand
-    post "/brand" => "forms/brand#create", as: :brand_create
+    get "/brand" => "forms/brand#new", as: :form_brand
+    post "/brand" => "forms/brand#create", as: :form_brand_create
     get "/share-preview" => "forms/share_preview#new", as: :share_preview
     post "/share-preview" => "forms/share_preview#create", as: :share_preview_create
     get "/welsh-translation" => "forms/welsh_translation#new", as: :welsh_translation
@@ -218,6 +218,8 @@ Rails.application.routes.draw do
   resources :mou_signatures, only: %i[index], path: "mous"
 
   resources :organisations, only: %i[index show]
+
+  resources :brands, only: %i[index show]
 
   resource :mou_signature, only: %i[new show create], path: "/memorandum-of-understanding", defaults: { agreement_type: :crown }, as: :mou_signature do
     get "/signed", to: "mou_signatures#confirmation", as: :confirmation
