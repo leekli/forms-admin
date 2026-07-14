@@ -15,4 +15,9 @@ class DeliveryConfiguration < ApplicationRecord
   }
 
   validates :formats, inclusion: { in: FORMATS }
+
+  def as_json(options = {})
+    options[:only] ||= %i[delivery_method formats delivery_schedule]
+    super(options)
+  end
 end

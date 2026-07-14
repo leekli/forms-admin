@@ -180,7 +180,7 @@ class Form < ApplicationRecord
   def as_form_document(live_at: nil, language: :en)
     content = as_json(
       except: ATTRIBUTES_NOT_IN_FORM_DOCUMENT,
-      methods: %i[start_page steps],
+      methods: %i[start_page steps delivery_configurations],
     )
     content["form_id"] = content.delete("id").to_s
     content["live_at"] = live_at if live_at.present?
