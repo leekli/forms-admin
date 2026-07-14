@@ -2348,6 +2348,7 @@ en:
         submit: Filter
       name_blank: No name set
       organisation_blank: No organisation set
+      showing_count: Showing %{from} to %{to} of %{count} users
       table_headings:
         access: Access
         act_as_user: Act as user
@@ -2357,6 +2358,9 @@ en:
         role: Role
         signon_organisation: Signon organisation slug
       title: Users
+      user_count:
+        one: Showing 1 user
+        other: Showing %{count} users
       wrapper_aria_label: Users
     roles:
       all: All roles
