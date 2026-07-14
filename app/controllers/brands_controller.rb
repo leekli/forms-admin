@@ -12,4 +12,28 @@ class BrandsController < WebController
 
     @brand = Brand.find(params[:id])
   end
+
+  def new
+    authorize Brand, :can_edit_brands?
+
+    @brand = Brand.new
+  end
+
+  def create
+    authorize Brand, :can_edit_brands?
+
+    @brand = Brand.new(brand_params)
+
+    if @brand.save
+      redirect_to @brand, success: t("brands.success_messages.create")
+    else
+      render :new, status: :unprocessable_content
+    end
+  end
+
+private
+
+  def brand_params
+    params.require(:brand).permit(:name, :slug)
+  end
 end

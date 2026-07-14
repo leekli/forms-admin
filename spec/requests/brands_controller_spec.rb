@@ -74,4 +74,79 @@ RSpec.describe BrandsController, type: :request do
       end
     end
   end
+
+  describe "#new" do
+    let(:path) { new_brand_path }
+
+    include_examples "unauthorized user is forbidden"
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get path
+      end
+
+      it "returns http code 200 and renders the new view" do
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template("brands/new")
+      end
+    end
+  end
+
+  describe "#create" do
+    let(:path) { brands_path }
+    let(:params) { { brand: { name: "Cheshire East Council", slug: "cheshire-east" } } }
+
+    context "when the user is not a super admin" do
+      before do
+        login_as_standard_user
+      end
+
+      it "returns http code 403 and does not create a brand" do
+        expect {
+          post path, params: params
+        }.not_to change(Brand, :count)
+
+        expect(response).to have_http_status(:forbidden)
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+      end
+
+      it "creates a brand with the given name and slug" do
+        expect {
+          post path, params: params
+        }.to change(Brand, :count).by(1)
+
+        brand = Brand.last
+        expect(brand.name).to eq("Cheshire East Council")
+        expect(brand.slug).to eq("cheshire-east")
+      end
+
+      it "redirects to the brand page with a success message" do
+        post path, params: params
+
+        expect(response).to redirect_to(brand_path(Brand.last))
+        expect(flash[:success]).to eq(I18n.t("brands.success_messages.create"))
+      end
+
+      context "when the brand is invalid" do
+        let(:params) { { brand: { name: "", slug: "cheshire-east" } } }
+
+        it "does not create a brand and re-renders the new view" do
+          expect {
+            post path, params: params
+          }.not_to change(Brand, :count)
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(response).to render_template("brands/new")
+        end
+      end
+    end
+  end
 end
