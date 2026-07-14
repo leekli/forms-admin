@@ -832,4 +832,72 @@ RSpec.describe ReportsController, type: :request do
       end
     end
   end
+
+  describe "dispatcher pattern (#render_feature_report)" do
+    context "when a forms-based feature report action is called" do
+      let(:path) { report_forms_with_payments_path(tag: :live) }
+      let(:form) { create(:form, :live, payment_url: "https://www.gov.uk/payments/organisation/service") }
+      let(:forms) { [form] }
+
+      before do
+        login_as_super_admin_user
+        get path
+      end
+
+      it "renders the feature report with forms data" do
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template("reports/feature_report")
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
+      end
+    end
+
+    context "when a questions-based feature report action is called" do
+      let(:path) { report_questions_with_add_another_answer_path(tag: :live) }
+      let(:form) do
+        create(:form, :live, pages: [
+          create(:page, is_repeatable: true),
+        ])
+      end
+      let(:forms) { [form] }
+
+      before do
+        login_as_super_admin_user
+        get path
+      end
+
+      it "renders the feature report with questions data" do
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template("reports/feature_report")
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[3]", text: "Question text"
+        expect(node).to have_xpath "//tbody/tr/td[3]", text: form.pages.first.question_text
+      end
+    end
+
+    context "when a feature report action with a custom type is called" do
+      let(:path) { report_forms_with_routes_path(tag: :live) }
+      let(:form) do
+        form = create(:form, :live, :ready_for_routing)
+        create(:condition, routing_page_id: form.pages.first.id, check_page_id: form.pages.first.id, answer_value: "Option 1", goto_page_id: form.pages.second.id)
+        form.live_form_document.update!(content: form.reload.as_form_document(live_at: form.updated_at))
+        form
+      end
+      let(:forms) { [form] }
+
+      before do
+        login_as_super_admin_user
+        get path
+      end
+
+      it "renders the feature report with the correct type context" do
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template("reports/feature_report")
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
+        expect(node).to have_xpath "//tbody/tr[1]/td[3]", text: "1"
+      end
+    end
+  end
 end
