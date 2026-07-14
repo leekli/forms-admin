@@ -2,11 +2,13 @@ require "rails_helper"
 
 RSpec.describe BrandsController, type: :request do
   shared_examples "unauthorized user is forbidden" do
+    let(:do_request) { get path }
+
     context "when the user is not a super admin" do
       before do
         login_as_standard_user
 
-        get path
+        do_request
       end
 
       it "returns http code 403 and renders forbidden" do
@@ -98,18 +100,19 @@ RSpec.describe BrandsController, type: :request do
     let(:path) { brands_path }
     let(:params) { { brand: { name: "Testshire Council", slug: "testshire" } } }
 
+    it_behaves_like "unauthorized user is forbidden" do
+      let(:do_request) { post path, params: params }
+    end
+
     context "when the user is not a super admin" do
       before do
         login_as_standard_user
       end
 
-      it "returns http code 403 and does not create a brand" do
+      it "does not create a brand" do
         expect {
           post path, params: params
         }.not_to change(Brand, :count)
-
-        expect(response).to have_http_status(:forbidden)
-        expect(response).to render_template("errors/forbidden")
       end
     end
 
@@ -175,18 +178,19 @@ RSpec.describe BrandsController, type: :request do
     let(:path) { brand_path(brand) }
     let(:params) { { brand: { name: "Greater Testshire Council", slug: "greater-testshire" } } }
 
+    it_behaves_like "unauthorized user is forbidden" do
+      let(:do_request) { put path, params: params }
+    end
+
     context "when the user is not a super admin" do
       before do
         login_as_standard_user
       end
 
-      it "returns http code 403 and does not change the brand" do
+      it "does not change the brand" do
         expect {
           put path, params: params
         }.not_to(change { brand.reload.attributes })
-
-        expect(response).to have_http_status(:forbidden)
-        expect(response).to render_template("errors/forbidden")
       end
     end
 
