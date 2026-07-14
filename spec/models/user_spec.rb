@@ -424,7 +424,7 @@ describe User, type: :model do
       context "and the user's organisation is not the same as given" do
         it "returns false" do
           user = create(:organisation_admin_user)
-          other_org = build(:organisation, id: 2)
+          other_org = build(:organisation)
 
           expect(user.is_organisations_admin?(other_org)).to be(false)
         end
