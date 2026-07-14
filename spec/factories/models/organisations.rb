@@ -1,14 +1,10 @@
 FactoryBot.define do
   factory :organisation do
     govuk_content_id { nil }
-    slug { "test-org" }
+    sequence(:slug) { |n| "test-org-#{n}" }
     name { slug.titleize }
     abbreviation { name.split.collect(&:chr).join }
     internal { false }
-
-    initialize_with do
-      Organisation.create_with(govuk_content_id:, name:).find_or_initialize_by(slug:)
-    end
 
     trait :with_signed_mou do
       after(:build) do |organisation|

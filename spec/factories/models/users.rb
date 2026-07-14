@@ -26,10 +26,10 @@ FactoryBot.define do
       org_has_signed_mou
     end
 
-    organisation { association :organisation, slug: "test-org" }
+    organisation { association :organisation }
 
     trait :org_has_signed_mou do
-      organisation { association :organisation, :with_signed_mou, slug: "test-org" }
+      organisation { association :organisation, :with_signed_mou }
     end
 
     after(:build) do |user|
