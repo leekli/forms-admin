@@ -1543,6 +1543,7 @@ en:
         none: This organisation does not have any organisation admins.
       brands:
         add: Add a brand
+        guidance: Forms that already use a brand will continue to use it, even if the brand is removed from this organisation.
         heading: Brands
         none: This organisation does not have any brands. Forms in this organisation use the default GOV.UK branding.
         remove: Remove

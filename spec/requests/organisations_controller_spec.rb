@@ -192,6 +192,7 @@ RSpec.describe OrganisationsController, type: :request do
 
       it "shows the organisation's brands with a link to add a brand" do
         expect(response.body).to include(organisation_brand.brand.name)
+        expect(response.body).to include(I18n.t("organisations.show.brands.guidance"))
         expect(response.body).to include(I18n.t("organisations.show.brands.add"))
         expect(response.body).to include(new_organisation_brand_path(organisation))
       end
