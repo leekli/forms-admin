@@ -6,14 +6,14 @@ class Forms::BrandInput < BaseInput
   validates :brand_id, inclusion: { in: ->(input) { input.allowed_brand_ids } }, allow_blank: true
 
   def brands
-    organisation = form.group&.organisation
-    return Brand.none if organisation.nil?
-
-    organisation.brands
+    @brands ||= begin
+      organisation = form.group&.organisation
+      organisation.nil? ? Brand.none : organisation.brands
+    end
   end
 
   def allowed_brand_ids
-    brands.map(&:slug)
+    brands.pluck(:slug)
   end
 
   def brand_options
