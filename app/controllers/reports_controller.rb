@@ -28,107 +28,55 @@ class ReportsController < WebController
   end
 
   def questions_with_add_another_answer
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    questions = Reports::FeatureReportService.new(forms).questions_with_add_another_answer
-
-    questions_feature_report(tag, params[:action], questions)
+    render_feature_report(:questions_with_add_another_answer, kind: :questions)
   end
 
   def forms_that_are_copies
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_that_are_copies
-
-    forms_feature_report(tag, params[:action], forms)
+    render_feature_report(:forms_that_are_copies, kind: :forms)
   end
 
   def forms_with_routes
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_routes
-
-    forms_feature_report(tag, params[:action], forms, type: :forms_with_routes)
+    render_feature_report(:forms_with_routes, kind: :forms, type: :forms_with_routes)
   end
 
   def forms_with_branch_routes
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_branch_routes
-
-    forms_feature_report(tag, params[:action], forms, type: :forms_with_routes)
+    render_feature_report(:forms_with_branch_routes, kind: :forms, type: :forms_with_routes)
   end
 
   def forms_with_payments
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_payments
-
-    forms_feature_report(tag, params[:action], forms)
+    render_feature_report(:forms_with_payments, kind: :forms)
   end
 
   def forms_with_exit_pages
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_exit_pages
-
-    forms_feature_report(tag, params[:action], forms)
+    render_feature_report(:forms_with_exit_pages, kind: :forms)
   end
 
   def forms_with_csv_submission_email_attachments
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_csv_submission_email_attachments
-
-    forms_feature_report(tag, params[:action], forms)
+    render_feature_report(:forms_with_csv_submission_email_attachments, kind: :forms)
   end
 
   def forms_with_json_submission_email_attachments
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_json_submission_email_attachments
-
-    forms_feature_report(tag, params[:action], forms)
+    render_feature_report(:forms_with_json_submission_email_attachments, kind: :forms)
   end
 
   def forms_with_daily_submission_csv
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_daily_submission_csv
-
-    forms_feature_report(tag, params[:action], forms)
+    render_feature_report(:forms_with_daily_submission_csv, kind: :forms)
   end
 
   def forms_with_weekly_submission_csv
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_weekly_submission_csv
-
-    forms_feature_report(tag, params[:action], forms)
+    render_feature_report(:forms_with_weekly_submission_csv, kind: :forms)
   end
 
   def forms_with_s3_submissions
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_s3_submissions
-
-    forms_feature_report(tag, params[:action], forms)
+    render_feature_report(:forms_with_s3_submissions, kind: :forms)
   end
 
   def forms_with_welsh_translation
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_welsh_translation
-
-    forms_feature_report(tag, params[:action], forms)
+    render_feature_report(:forms_with_welsh_translation, kind: :forms)
   end
 
   def forms_with_copy_of_answers_enabled
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    forms = Reports::FeatureReportService.new(forms).forms_with_copy_of_answers_enabled
-
-    forms_feature_report(tag, params[:action], forms)
+    render_feature_report(:forms_with_copy_of_answers_enabled, kind: :forms)
   end
 
   def users
@@ -154,35 +102,19 @@ class ReportsController < WebController
   end
 
   def selection_questions_with_autocomplete
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    questions = Reports::FeatureReportService.new(forms).selection_questions_with_autocomplete
-
-    questions_feature_report(tag, params[:action], questions, type: :selection_questions)
+    render_feature_report(:selection_questions_with_autocomplete, kind: :questions, type: :selection_questions)
   end
 
   def selection_questions_with_radios
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    questions = Reports::FeatureReportService.new(forms).selection_questions_with_radios
-
-    questions_feature_report(tag, params[:action], questions, type: :selection_questions)
+    render_feature_report(:selection_questions_with_radios, kind: :questions, type: :selection_questions)
   end
 
   def selection_questions_with_checkboxes
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    questions = Reports::FeatureReportService.new(forms).selection_questions_with_checkboxes
-
-    questions_feature_report(tag, params[:action], questions, type: :selection_questions)
+    render_feature_report(:selection_questions_with_checkboxes, kind: :questions, type: :selection_questions)
   end
 
   def selection_questions_with_none_of_the_above
-    tag = params[:tag]
-    forms = Reports::FormDocumentsService.form_documents(tag:)
-    questions = Reports::FeatureReportService.new(forms).selection_questions_with_none_of_the_above
-
-    questions_feature_report(tag, params[:action], questions, type: :selection_questions_with_none_of_the_above)
+    render_feature_report(:selection_questions_with_none_of_the_above, kind: :questions, type: :selection_questions_with_none_of_the_above)
   end
 
   def live_forms_csv
@@ -232,6 +164,18 @@ private
 
   def check_user_has_permission
     authorize :report, :can_view_reports?
+  end
+
+  def render_feature_report(feature_method, kind:, type: nil)
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
+    records = Reports::FeatureReportService.new(forms).send(feature_method)
+
+    if kind == :forms
+      forms_feature_report(tag, params[:action], records, type: type || :forms)
+    else
+      questions_feature_report(tag, params[:action], records, type: type || :questions)
+    end
   end
 
   def questions_csv_filename(tag, answer_type)
