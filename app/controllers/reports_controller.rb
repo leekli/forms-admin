@@ -241,6 +241,6 @@ private
   end
 
   def csv_filename(base_name)
-    "#{base_name}-#{Time.zone.now}.csv"
+    "#{base_name}-#{Time.zone.now.strftime('%Y-%m-%d--%H-%M-%S')}.csv"
   end
 end
