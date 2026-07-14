@@ -1,8 +1,18 @@
 require "rails_helper"
 
 RSpec.describe Forms::BrandInput, type: :model do
+  let(:organisation) { create(:organisation) }
+  let(:group) { create(:group, organisation:) }
   let(:form) do
-    create(:form, :live)
+    create(:form, :live, :with_group, group:)
+  end
+
+  let(:cheshire_east) { create(:brand, slug: "cheshire-east", name: "Cheshire East Council") }
+  let(:south_gloucestershire) { create(:brand, slug: "south-gloucestershire", name: "South Gloucestershire Council") }
+
+  before do
+    create(:organisation_brand, organisation:, brand: cheshire_east)
+    create(:organisation_brand, organisation:, brand: south_gloucestershire)
   end
 
   describe "validations" do
@@ -14,15 +24,29 @@ RSpec.describe Forms::BrandInput, type: :model do
       end
     end
 
-    context "when given a brand_id from the configured list" do
+    context "when given a brand_id from the organisation's brands" do
       it "validates successfully" do
-        brand_input = described_class.new(form:, brand_id: Settings.branding.available_brands.first.id)
+        brand_input = described_class.new(form:, brand_id: "cheshire-east")
 
         expect(brand_input).to be_valid
       end
     end
 
-    context "when given a brand_id that is not in the configured list" do
+    context "when given a brand_id that is not one of the organisation's brands" do
+      it "returns a validation error" do
+        create(:brand, slug: "not-allowed-for-organisation")
+
+        brand_input = described_class.new(form:, brand_id: "not-allowed-for-organisation")
+
+        brand_input.validate(:brand_id)
+
+        expect(brand_input.errors.full_messages_for(:brand_id)).to include(
+          "Brand Select a brand",
+        )
+      end
+    end
+
+    context "when given a brand_id that does not exist" do
       it "returns a validation error" do
         brand_input = described_class.new(form:, brand_id: "not-a-brand")
 
@@ -36,11 +60,32 @@ RSpec.describe Forms::BrandInput, type: :model do
   end
 
   describe "#brand_options" do
-    it "starts with the GOV.UK default option followed by the configured brands" do
+    it "starts with the GOV.UK default option followed by the organisation's brands" do
       brand_input = described_class.new(form:)
 
       expect(brand_input.brand_options.first).to have_attributes(id: "", name: "GOV.UK (default)")
-      expect(brand_input.brand_options.drop(1).map(&:id)).to eq(Settings.branding.available_brands.map(&:id))
+      expect(brand_input.brand_options.drop(1).map(&:id)).to eq %w[cheshire-east south-gloucestershire]
+    end
+
+    context "when the organisation has no brands" do
+      let(:other_organisation) { create(:organisation, slug: "other-org") }
+      let(:group) { create(:group, organisation: other_organisation) }
+
+      it "only includes the GOV.UK default option" do
+        brand_input = described_class.new(form:)
+
+        expect(brand_input.brand_options.map(&:id)).to eq [""]
+      end
+    end
+
+    context "when the form is not in a group" do
+      let(:form) { create(:form, :live) }
+
+      it "only includes the GOV.UK default option" do
+        brand_input = described_class.new(form:)
+
+        expect(brand_input.brand_options.map(&:id)).to eq [""]
+      end
     end
   end
 

@@ -3,21 +3,22 @@ class Forms::BrandInput < BaseInput
 
   attr_accessor :form, :brand_id
 
-  validates :brand_id, inclusion: { in: ->(_input) { Forms::BrandInput.allowed_brand_ids } }, allow_blank: true
+  validates :brand_id, inclusion: { in: ->(input) { input.allowed_brand_ids } }, allow_blank: true
 
-  class << self
-    def brands
-      Settings.branding.available_brands
-    end
+  def brands
+    organisation = form.group&.organisation
+    return Brand.none if organisation.nil?
 
-    def allowed_brand_ids
-      brands.map(&:id)
-    end
+    organisation.brands
+  end
+
+  def allowed_brand_ids
+    brands.map(&:slug)
   end
 
   def brand_options
     default_option = BrandOption.new("", I18n.t("helpers.label.forms_brand_input.brand_id.options.default"))
-    [default_option] + self.class.brands.map { |brand| BrandOption.new(brand.id, brand.name) }
+    [default_option] + brands.map { |brand| BrandOption.new(brand.slug, brand.name) }
   end
 
   def submit
