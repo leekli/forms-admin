@@ -1,4 +1,5 @@
 class BrandsController < WebController
+  before_action :set_brand, only: %i[show edit update]
   after_action :verify_authorized
 
   def index
@@ -9,8 +10,6 @@ class BrandsController < WebController
 
   def show
     authorize Brand, :can_view_brands?
-
-    @brand = Brand.find(params[:id])
   end
 
   def new
@@ -33,14 +32,10 @@ class BrandsController < WebController
 
   def edit
     authorize Brand, :can_edit_brands?
-
-    @brand = Brand.find(params[:id])
   end
 
   def update
     authorize Brand, :can_edit_brands?
-
-    @brand = Brand.find(params[:id])
 
     if @brand.update(update_brand_params)
       redirect_to @brand, success: t("brands.success_messages.update"), status: :see_other
@@ -50,6 +45,10 @@ class BrandsController < WebController
   end
 
 private
+
+  def set_brand
+    @brand = Brand.find(params[:id])
+  end
 
   def brand_params
     params.require(:brand).permit(:name, :slug)
