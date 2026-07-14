@@ -1,13 +1,13 @@
 FactoryBot.define do
   factory :group do
     sequence(:name) { |n| "Group #{n}" }
-    organisation { association :organisation, id: 1, slug: "test-org" }
+    organisation { association :organisation, slug: "test-org" }
     creator { association :user, organisation: }
     status { :trial }
     external_id { SecureRandom.base58(8) }
 
     trait :org_has_org_admin do
-      organisation { association :organisation, :with_org_admin, id: 1, slug: "test-org" }
+      organisation { association :organisation, :with_org_admin, slug: "test-org" }
     end
   end
 end
