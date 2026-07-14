@@ -19,8 +19,8 @@ RSpec.describe BrandsController, type: :request do
   describe "#index" do
     let(:path) { brands_path }
 
-    let!(:brand) { create :brand, slug: "cheshire-east", name: "Cheshire East Council" }
-    let!(:other_brand) { create :brand, slug: "south-gloucestershire", name: "South Gloucestershire Council" }
+    let!(:brand) { create :brand, slug: "testshire", name: "Testshire Council" }
+    let!(:other_brand) { create :brand, slug: "exampleton", name: "Exampleton Town Council" }
 
     include_examples "unauthorized user is forbidden"
 
@@ -51,7 +51,7 @@ RSpec.describe BrandsController, type: :request do
   end
 
   describe "#show" do
-    let(:brand) { create :brand, slug: "cheshire-east", name: "Cheshire East Council" }
+    let(:brand) { create :brand, slug: "testshire", name: "Testshire Council" }
     let(:path) { brand_path(brand) }
 
     include_examples "unauthorized user is forbidden"
@@ -96,7 +96,7 @@ RSpec.describe BrandsController, type: :request do
 
   describe "#create" do
     let(:path) { brands_path }
-    let(:params) { { brand: { name: "Cheshire East Council", slug: "cheshire-east" } } }
+    let(:params) { { brand: { name: "Testshire Council", slug: "testshire" } } }
 
     context "when the user is not a super admin" do
       before do
@@ -124,8 +124,8 @@ RSpec.describe BrandsController, type: :request do
         }.to change(Brand, :count).by(1)
 
         brand = Brand.last
-        expect(brand.name).to eq("Cheshire East Council")
-        expect(brand.slug).to eq("cheshire-east")
+        expect(brand.name).to eq("Testshire Council")
+        expect(brand.slug).to eq("testshire")
       end
 
       it "redirects to the brand page with a success message" do
@@ -136,7 +136,7 @@ RSpec.describe BrandsController, type: :request do
       end
 
       context "when the brand is invalid" do
-        let(:params) { { brand: { name: "", slug: "cheshire-east" } } }
+        let(:params) { { brand: { name: "", slug: "testshire" } } }
 
         it "does not create a brand and re-renders the new view" do
           expect {
