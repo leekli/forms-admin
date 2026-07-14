@@ -148,6 +148,11 @@ en:
   activerecord:
     errors:
       models:
+        brand:
+          attributes:
+            slug:
+              invalid: Slug must only include lowercase letters a to z, numbers and hyphens
+              taken: There is already a brand with this slug
         draft_question:
           attributes:
             hint_text:
@@ -282,16 +287,23 @@ en:
       <p>If you do not choose a brand, your form will use the default GOV.UK brand.</p>
     heading: Choose a brand for your form
   brands:
+    edit:
+      title: Edit brand
     index:
+      create_brand: Create a brand
       no_results: No brands found.
       table_caption: Brands
       table_headings:
         name: Name
         slug: Slug
     show:
+      edit_brand: Edit this brand
       summary:
         created_at: Created
         slug: Slug
+    success_messages:
+      create: The brand has been created
+      update: The brand has been updated
   bulk_options:
     hint: Enter each option on a new line
     label: Enter the options for your list
@@ -1632,6 +1644,7 @@ en:
     archive_form_confirmation: Your form has been archived
     archive_welsh_confirm: Archive the Welsh version of this form
     brand: Choose a brand for your form
+    brand_new: Create a brand
     brands: Brands
     bulk_options: Enter your list’s options into a text box
     change_name: Name your form

@@ -27,3 +27,7 @@
 <% else %>
   <p class="govuk-body"><%= t("brands.index.no_results") %></p>
 <% end %>
+
+<% if policy(Brand).can_edit_brands? %>
+  <%= govuk_button_link_to t("brands.index.create_brand"), new_brand_path, class: "govuk-!-margin-top-3" %>
+<% end %>
