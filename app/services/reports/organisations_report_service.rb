@@ -34,7 +34,7 @@ private
 
   def organisation_domains_data
     Organisation.includes(:organisation_domains).order(:name).map do |organisation|
-      domains = organisation.organisation_domains.pluck(:domain)
+      domains = organisation.organisation_domains.pluck(:domain).sort
       domains_list = domains.any? ? ActionController::Base.helpers.govuk_list(domains, type: :bullet) : ""
       [organisation.name, organisation.slug, domains_list]
     end

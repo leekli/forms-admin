@@ -135,7 +135,7 @@ namespace :organisations do
       organisation = Organisation.find_by(slug: organisation_slug)
       abort "Organisation with slug #{organisation_slug} does not exist" if organisation.nil?
 
-      domains = organisation.organisation_domains.pluck(:domain).join(", ")
+      domains = organisation.organisation_domains.pluck(:domain).sort.join(", ")
       if domains.present?
         Rails.logger.info "Domains for organisation with slug '#{organisation_slug}': #{domains}"
       else

@@ -313,7 +313,7 @@ RSpec.describe "organisations.rake", type: :task do
 
       expect {
         task.invoke("test-org", "example.gov.uk")
-      }.to change { organisation.reload.organisation_domains.pluck(:domain) }
+      }.to change { organisation.reload.organisation_domains.pluck(:domain).sort }
         .from(%w[example.gov.uk example.org])
         .to(%w[example.org])
     end
@@ -324,7 +324,7 @@ RSpec.describe "organisations.rake", type: :task do
 
       expect {
         task.invoke("test-org", "missing.gov.uk", "example.gov.uk")
-      }.to change { organisation.reload.organisation_domains.pluck(:domain) }
+      }.to change { organisation.reload.organisation_domains.pluck(:domain).sort }
         .from(%w[example.gov.uk example.org])
         .to(%w[example.org])
     end

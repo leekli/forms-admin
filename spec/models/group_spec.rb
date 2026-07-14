@@ -185,7 +185,7 @@ RSpec.describe Group, type: :model do
             Membership.create!(group:, user:, role: :editor, added_by: group.creator)
           end
 
-          expect(group.users.group_admins).to eq group_admin_users
+          expect(group.users.group_admins).to match_array(group_admin_users)
         end
       end
     end
@@ -218,11 +218,7 @@ RSpec.describe Group, type: :model do
       group.group_forms.build(form: forms.third)
       group.save!
 
-      expect(described_class.find(1).group_forms).to eq [
-        GroupForm.build(form: forms.first, group_id: 1),
-        GroupForm.build(form: forms.second, group_id: 1),
-        GroupForm.build(form: forms.third, group_id: 1),
-      ]
+      expect(described_class.find(1).group_forms).to contain_exactly(GroupForm.build(form: forms.first, group_id: 1), GroupForm.build(form: forms.second, group_id: 1), GroupForm.build(form: forms.third, group_id: 1))
     end
 
     it "is associated with a form through the form ID" do
