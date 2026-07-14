@@ -151,7 +151,8 @@ en:
         brand:
           attributes:
             slug:
-              invalid: Enter a slug in the correct format, like example-council
+              invalid: Slug must only include lowercase letters a to z, numbers and hyphens
+              taken: There is already a brand with this slug
         draft_question:
           attributes:
             hint_text:
