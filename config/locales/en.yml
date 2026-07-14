@@ -282,6 +282,8 @@ en:
       <p>If you do not choose a brand, your form will use the default GOV.UK brand.</p>
     heading: Choose a brand for your form
   brands:
+    edit:
+      title: Edit brand
     index:
       create_brand: Create a brand
       no_results: No brands found.
@@ -290,11 +292,13 @@ en:
         name: Name
         slug: Slug
     show:
+      edit_brand: Edit this brand
       summary:
         created_at: Created
         slug: Slug
     success_messages:
       create: The brand has been created
+      update: The brand has been updated
   bulk_options:
     hint: Enter each option on a new line
     label: Enter the options for your list

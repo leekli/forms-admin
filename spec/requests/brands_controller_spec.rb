@@ -149,4 +149,77 @@ RSpec.describe BrandsController, type: :request do
       end
     end
   end
+
+  describe "#edit" do
+    let(:brand) { create :brand, slug: "testshire", name: "Testshire Council" }
+    let(:path) { edit_brand_path(brand) }
+
+    include_examples "unauthorized user is forbidden"
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get path
+      end
+
+      it "returns http code 200 and renders the edit view" do
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template("brands/edit")
+      end
+    end
+  end
+
+  describe "#update" do
+    let(:brand) { create :brand, slug: "testshire", name: "Testshire Council" }
+    let(:path) { brand_path(brand) }
+    let(:params) { { brand: { name: "Greater Testshire Council", slug: "greater-testshire" } } }
+
+    context "when the user is not a super admin" do
+      before do
+        login_as_standard_user
+      end
+
+      it "returns http code 403 and does not change the brand" do
+        expect {
+          put path, params: params
+        }.not_to(change { brand.reload.attributes })
+
+        expect(response).to have_http_status(:forbidden)
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+      end
+
+      it "updates the brand's name but not its slug" do
+        put path, params: params
+
+        expect(brand.reload).to have_attributes(name: "Greater Testshire Council", slug: "testshire")
+      end
+
+      it "redirects to the brand page with a success message" do
+        put path, params: params
+
+        expect(response).to redirect_to(brand_path(brand))
+        expect(flash[:success]).to eq(I18n.t("brands.success_messages.update"))
+      end
+
+      context "when the brand is invalid" do
+        let(:params) { { brand: { name: "" } } }
+
+        it "does not change the brand and re-renders the edit view" do
+          expect {
+            put path, params: params
+          }.not_to(change { brand.reload.attributes })
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(response).to render_template("brands/edit")
+        end
+      end
+    end
+  end
 end

@@ -31,9 +31,31 @@ class BrandsController < WebController
     end
   end
 
+  def edit
+    authorize Brand, :can_edit_brands?
+
+    @brand = Brand.find(params[:id])
+  end
+
+  def update
+    authorize Brand, :can_edit_brands?
+
+    @brand = Brand.find(params[:id])
+
+    if @brand.update(update_brand_params)
+      redirect_to @brand, success: t("brands.success_messages.update"), status: :see_other
+    else
+      render :edit, status: :unprocessable_content
+    end
+  end
+
 private
 
   def brand_params
     params.require(:brand).permit(:name, :slug)
+  end
+
+  def update_brand_params
+    params.require(:brand).permit(:name)
   end
 end

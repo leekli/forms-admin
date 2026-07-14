@@ -16,5 +16,11 @@
         row.with_value { l(@brand.created_at.to_date, format: :long) }
       end
     end %>
+
+    <% if policy(Brand).can_edit_brands? %>
+      <p class="govuk-body">
+        <%= govuk_link_to t("brands.show.edit_brand"), edit_brand_path(@brand) %>
+      </p>
+    <% end %>
   </div>
 </div>
