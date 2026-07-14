@@ -544,7 +544,7 @@ RSpec.describe "/groups", type: :request do
   end
 
   describe "GET /delete" do
-    let!(:group) { create :group }
+    let!(:group) { create :group, organisation: test_org }
 
     context "when user is a super admin" do
       before do
@@ -598,7 +598,7 @@ RSpec.describe "/groups", type: :request do
   end
 
   describe "DELETE /destroy" do
-    let!(:group) { create :group, name: "Test Group" }
+    let!(:group) { create :group, name: "Test Group", organisation: test_org }
 
     context "when user is a super admin" do
       before do

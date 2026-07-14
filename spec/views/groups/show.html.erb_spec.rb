@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "groups/show", type: :view do
   let(:current_user) { create :user, :org_has_signed_mou }
   let(:forms) { [] }
-  let(:group) { create :group, name: "My Group" }
+  let(:group) { create :group, name: "My Group", organisation: current_user.organisation }
 
   let(:form_list_presenter) { FormListPresenter.call(forms:, group:) }
 
@@ -150,7 +150,7 @@ RSpec.describe "groups/show", type: :view do
   end
 
   context "when the group is a trial group" do
-    let(:group) { create :group, :trial, name: "trial group" }
+    let(:group) { create :group, :trial, name: "trial group", organisation: current_user.organisation }
 
     it "renders the status of the group" do
       expect(rendered).to have_css ".govuk-caption-l", text: t("groups.status_caption.trial")
@@ -354,7 +354,7 @@ RSpec.describe "groups/show", type: :view do
   end
 
   context "when the group has an upgrade requested" do
-    let(:group) { create :group, :upgrade_requested }
+    let(:group) { create :group, :upgrade_requested, organisation: current_user.organisation }
 
     it "have the caption trial group" do
       expect(rendered).to have_css ".govuk-caption-l", text: "Trial group"
@@ -370,7 +370,7 @@ RSpec.describe "groups/show", type: :view do
   end
 
   context "when the group is an active group" do
-    let(:group) { create :group, :active, name: "Active group" }
+    let(:group) { create :group, :active, name: "Active group", organisation: current_user.organisation }
 
     it "renders the status of the group" do
       expect(rendered).to have_css ".govuk-caption-l", text: t("groups.status_caption.active")

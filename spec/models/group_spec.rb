@@ -126,9 +126,10 @@ RSpec.describe Group, type: :model do
 
   describe "associations" do
     it "destroys associated memberships" do
-      group = create :group
-      user = create :user
-      added_by = create :user
+      organisation = create :organisation
+      group = create :group, organisation: organisation
+      user = create :user, organisation: organisation
+      added_by = create :user, organisation: organisation
       create(:membership, group:, user:, added_by:)
 
       expect { group.destroy }.to change(Membership, :count).by(-1)
@@ -151,11 +152,12 @@ RSpec.describe Group, type: :model do
     describe "#memberships" do
       describe "#ordered" do
         it "orders the membership records by name of the associated user" do
-          group = create :group
+          organisation = create :organisation
+          group = create :group, organisation: organisation
           users = [
-            create(:user, name: "Barbara User"),
-            create(:user, name: "Alfred User"),
-            create(:user, name: "Charlie User"),
+            create(:user, name: "Barbara User", organisation: organisation),
+            create(:user, name: "Alfred User", organisation: organisation),
+            create(:user, name: "Charlie User", organisation: organisation),
           ]
 
           users.each do |user|
@@ -260,9 +262,10 @@ RSpec.describe Group, type: :model do
   describe "scopes" do
     describe ".for_user" do
       it "returns groups that the user is a member of" do
-        user = create :user
-        group1 = create :group
-        group2 = create :group
+        organisation = create :organisation
+        user = create :user, organisation: organisation
+        group1 = create :group, organisation: organisation
+        group2 = create :group, organisation: organisation
         create :group
         create :membership, user:, group: group1
         create :membership, user:, group: group2
@@ -278,8 +281,9 @@ RSpec.describe Group, type: :model do
       end
 
       it "does not return groups that the user is not a member of" do
-        user = create :user
-        group1 = create :group
+        organisation = create :organisation
+        user = create :user, organisation: organisation
+        group1 = create :group, organisation: organisation
         create :group
         create :group
         create :membership, user:, group: group1

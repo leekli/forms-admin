@@ -19,13 +19,12 @@ describe Reports::OrganisationsReportService do
 
     context "with organisations" do
       it "returns the correct rows" do
-        create(:organisation, name: "Ministry of tests", slug: "ministry-of-tests", organisation_domains: [
-          create(:organisation_domain, domain: "ministry-of-tests.gov.uk"),
-          create(:organisation_domain, domain: "mot.gov.uk"),
-        ])
-        create(:organisation, name: "Department of juggling", slug: "department-of-juggling", organisation_domains: [
-          create(:organisation_domain, domain: "juggling.gov.uk"),
-        ])
+        create(:organisation, name: "Test Org", slug: "test-org")
+        ministry_org = create(:organisation, name: "Ministry of tests", slug: "ministry-of-tests")
+        create(:organisation_domain, domain: "ministry-of-tests.gov.uk", organisation: ministry_org)
+        create(:organisation_domain, domain: "mot.gov.uk", organisation: ministry_org)
+        juggling_org = create(:organisation, name: "Department of juggling", slug: "department-of-juggling")
+        create(:organisation_domain, domain: "juggling.gov.uk", organisation: juggling_org)
 
         expect(service.organisation_domains_report[:rows]).to contain_exactly(
           [{ text: "Test Org" }, { text: "test-org" }, { text: "" }],
