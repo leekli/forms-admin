@@ -244,7 +244,7 @@ RSpec.describe Pages::Selection::OptionsInput do
       context "and there are fewer than 3000 options" do
         let(:selection_options) { (1..2999).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
-        it "returns false" do
+        it "returns true" do
           expect(input.can_add_more_options?).to be true
         end
       end
