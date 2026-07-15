@@ -28,7 +28,7 @@ class OrganisationsController < WebController
   def show
     authorize Organisation, :can_view_organisations?
 
-    @organisation = Organisation.includes(:organisation_domains, mou_signatures: :user).find(params[:id])
+    @organisation = Organisation.includes(:organisation_domains, :brands, mou_signatures: :user).find(params[:id])
   end
 
 private

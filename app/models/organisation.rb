@@ -8,6 +8,9 @@ class Organisation < ApplicationRecord
   has_many :mou_signatures
   has_many :organisation_domains, dependent: :destroy
 
+  has_many :organisation_brands, dependent: :destroy
+  has_many :brands, -> { order(:name) }, through: :organisation_brands
+
   scope :not_closed, -> { where(closed: false) }
   scope :with_users, -> { joins(:users).distinct.order(:name) }
 

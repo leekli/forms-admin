@@ -73,6 +73,11 @@ describe "organisations/show.html.erb" do
       expect(rendered).to have_text(I18n.t("organisations.show.admin_users.none"))
       expect(rendered).to have_text(I18n.t("organisations.show.mou_signatures.none"))
       expect(rendered).to have_text(I18n.t("organisations.show.domains.none"))
+      expect(rendered).to have_text(I18n.t("organisations.show.brands.none"))
+    end
+
+    it "shows brands guidance when there are no brands" do
+      expect(rendered).to have_text(I18n.t("organisations.show.brands.guidance"))
     end
 
     it "shows the MOU guidance with links to the agreements" do

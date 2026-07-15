@@ -217,7 +217,9 @@ Rails.application.routes.draw do
 
   resources :mou_signatures, only: %i[index], path: "mous"
 
-  resources :organisations, only: %i[index show]
+  resources :organisations, only: %i[index show] do
+    resources :brands, controller: :organisation_brands, only: %i[new create destroy]
+  end
 
   resources :brands, only: %i[index show new create edit update]
 
