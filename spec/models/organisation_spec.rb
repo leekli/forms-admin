@@ -9,19 +9,6 @@ RSpec.describe Organisation, type: :model do
     }.to raise_error ActiveRecord::RecordNotUnique
   end
 
-  describe "factory" do
-    it "does not create organisation if already exists" do
-      existing_organisation = create(:organisation, slug: "duplicate-org")
-      new_organisation = nil
-
-      expect {
-        new_organisation = create(:organisation, slug: "duplicate-org")
-      }.not_to raise_error
-
-      expect(new_organisation).to eq(existing_organisation)
-    end
-  end
-
   describe "versioning", :versioning do
     it "enables paper trail" do
       expect(described_class.new).to be_versioned

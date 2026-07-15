@@ -58,6 +58,16 @@ describe User, type: :model do
       end
     end
 
+    context "when reassigning to a new, unsaved organisation" do
+      let(:user) { create(:user, organisation: create(:organisation)) }
+
+      it "is valid even though the new organisation is not yet persisted" do
+        user.organisation = build(:organisation)
+
+        expect(user).to be_valid
+      end
+    end
+
     context "when updating name" do
       let(:user) { create :user, :with_no_name }
 
@@ -128,7 +138,7 @@ describe User, type: :model do
   describe "associations" do
     it "destroys associated memberships" do
       user = create(:user)
-      group = create(:group)
+      group = create(:group, organisation: user.organisation)
 
       membership = create(:membership, user:, group:)
       user.destroy!
@@ -364,7 +374,7 @@ describe User, type: :model do
 
     it "returns false when user had an organisation" do
       user = create(:user)
-      user.update!(organisation: build(:organisation))
+      user.update!(organisation: create(:organisation))
       expect(user).not_to be_given_organisation
     end
   end
@@ -380,9 +390,9 @@ describe User, type: :model do
 
     context "when the user is an organisation admin" do
       it "returns true" do
-        user = create(:organisation_admin_user)
+        user = create(:organisation_admin_user, organisation: create(:organisation, :with_signed_mou))
 
-        expect(user.can_administer_org?(organisation)).to be(true)
+        expect(user.can_administer_org?(user.organisation)).to be(true)
       end
     end
 
@@ -414,7 +424,7 @@ describe User, type: :model do
       context "and the user's organisation is not the same as given" do
         it "returns false" do
           user = create(:organisation_admin_user)
-          other_org = build(:organisation, id: 2)
+          other_org = build(:organisation)
 
           expect(user.is_organisations_admin?(other_org)).to be(false)
         end

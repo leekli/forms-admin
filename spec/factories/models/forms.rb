@@ -29,11 +29,11 @@ FactoryBot.define do
 
     trait :with_group do
       transient do
-        group { nil }
+        group { association :group }
       end
 
       after(:build) do |form, evaluator|
-        g = evaluator.group || FactoryBot.create(:group)
+        g = evaluator.group
         form.instance_variable_set(:@associated_group, g)
         form.define_singleton_method(:group) { g }
       end
@@ -61,7 +61,7 @@ FactoryBot.define do
       end
 
       pages do
-        Array.new(pages_count) { association(:page) }
+        Array.new(pages_count) { build(:page, form: nil) }
       end
 
       after(:build) do |form|
@@ -80,7 +80,7 @@ FactoryBot.define do
 
     trait :with_text_page do
       pages do
-        Array.new(1) { association(:page, answer_type: "text", answer_settings: { input_type: %w[single_line long_text].sample }) }
+        Array.new(1) { build(:page, answer_type: "text", answer_settings: { input_type: %w[single_line long_text].sample }, form: nil) }
       end
 
       question_section_completed { true }
@@ -148,7 +148,7 @@ FactoryBot.define do
       end
 
       pages do
-        Array.new(pages_count) { association(:page, :with_selection_settings) }
+        Array.new(pages_count) { build(:page, :with_selection_settings, form: nil) }
       end
 
       after(:build) do |form|
