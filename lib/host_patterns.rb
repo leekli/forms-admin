@@ -1,7 +1,9 @@
 module HostPatterns
   DEFAULT_HOST_PATTERNS = [
     /localhost/,
+    /127.0.0.1/,
     /\A[a-z0-9-]+\.app\.github\.dev\z/i,
+    /\A[a-z0-9-]+\.gitpod\.dev\z/i,
     /admin\.forms\.service\.gov\.uk/,
     /admin\.[^.]*\.forms\.service\.gov\.uk/,
     /admin\.internal.[^.]*\.forms\.service\.gov\.uk/,
