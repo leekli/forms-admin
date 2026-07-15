@@ -229,7 +229,7 @@ RSpec.describe Pages::Selection::OptionsInput do
 
   it_behaves_like "base selection options input"
 
-  describe "#can_add_more_options" do
+  describe "#can_add_more_options?" do
     context "when only_one_option is true for the draft_question" do
       let(:only_one_option) { "true" }
 
@@ -237,7 +237,7 @@ RSpec.describe Pages::Selection::OptionsInput do
         let(:selection_options) { (1..3000).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "returns false" do
-          expect(input.can_add_more_options).to be false
+          expect(input.can_add_more_options?).to be false
         end
       end
 
@@ -245,7 +245,7 @@ RSpec.describe Pages::Selection::OptionsInput do
         let(:selection_options) { (1..2999).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "returns false" do
-          expect(input.can_add_more_options).to be true
+          expect(input.can_add_more_options?).to be true
         end
       end
     end
@@ -257,7 +257,7 @@ RSpec.describe Pages::Selection::OptionsInput do
         let(:selection_options) { (1..30).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "returns false" do
-          expect(input.can_add_more_options).to be false
+          expect(input.can_add_more_options?).to be false
         end
       end
 
@@ -265,7 +265,7 @@ RSpec.describe Pages::Selection::OptionsInput do
         let(:selection_options) { (1..29).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "returns true" do
-          expect(input.can_add_more_options).to be true
+          expect(input.can_add_more_options?).to be true
         end
       end
     end

@@ -18,7 +18,7 @@ describe "pages/selection/options.html.erb", type: :view do
   before do
     # # mock the form.page_number method
     allow(form).to receive(:page_number).and_return(page_number)
-    allow(selection_options_input).to receive(:can_add_more_options).and_return(can_add_more_options)
+    allow(selection_options_input).to receive(:can_add_more_options?).and_return(can_add_more_options)
 
     # # mock the path helper
     without_partial_double_verification do
