@@ -6,7 +6,10 @@ describe "organisations/show.html.erb" do
 
   before do
     organisation_domains
-    create(:form, :with_group, group: create(:group, organisation:))
+    group = create(:group, organisation:)
+    create(:form, :live, :with_group, group:)
+    create_list(:form, 2, :with_group, group:)
+    create(:form, :archived, :with_group, group:)
 
     assign(:organisation, organisation)
 
@@ -22,13 +25,19 @@ describe "organisations/show.html.erb" do
     expect(rendered).to have_css(".govuk-summary-list__value", text: organisation.slug)
   end
 
-  it "shows the number of forms between the user and group counts" do
+  it "shows the live and draft form counts between the user and group counts" do
     users_index = rendered.index(I18n.t("organisations.show.summary.users"))
-    forms_index = rendered.index(I18n.t("organisations.show.summary.forms"))
+    live_forms_index = rendered.index(I18n.t("organisations.show.summary.live_forms"))
+    draft_forms_index = rendered.index(I18n.t("organisations.show.summary.draft_forms"))
     groups_index = rendered.index(I18n.t("organisations.show.summary.groups"))
 
-    expect(forms_index).to be_between(users_index, groups_index)
-    expect(rendered).to have_css(".govuk-summary-list__row", text: /#{I18n.t('organisations.show.summary.forms')}\s*1/)
+    expect(live_forms_index).to be_between(users_index, draft_forms_index)
+    expect(draft_forms_index).to be_between(live_forms_index, groups_index)
+  end
+
+  it "shows the number of live and draft forms, not counting archived forms" do
+    expect(rendered).to have_css(".govuk-summary-list__row", text: /#{I18n.t('organisations.show.summary.live_forms')}\s*1/)
+    expect(rendered).to have_css(".govuk-summary-list__row", text: /#{I18n.t('organisations.show.summary.draft_forms')}\s*2/)
   end
 
   it "shows whether the organisation is internal or closed" do

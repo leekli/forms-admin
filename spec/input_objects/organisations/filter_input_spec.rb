@@ -32,7 +32,8 @@ RSpec.describe Organisations::FilterInput, type: :model do
       expect(described_class.new.sort_options).to eq([
         OpenStruct.new(label: I18n.t("organisations.index.filter.sort.name"), value: "name"),
         OpenStruct.new(label: I18n.t("organisations.index.filter.sort.users"), value: "users"),
-        OpenStruct.new(label: I18n.t("organisations.index.filter.sort.forms"), value: "forms"),
+        OpenStruct.new(label: I18n.t("organisations.index.filter.sort.live_forms"), value: "live_forms"),
+        OpenStruct.new(label: I18n.t("organisations.index.filter.sort.draft_forms"), value: "draft_forms"),
         OpenStruct.new(label: I18n.t("organisations.index.filter.sort.agreement_date"), value: "agreement_date"),
       ])
     end

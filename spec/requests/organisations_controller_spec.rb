@@ -28,7 +28,9 @@ RSpec.describe OrganisationsController, type: :request do
 
     context "when the user is a super admin" do
       before do
-        create(:form, :with_group, group:)
+        create(:form, :live, :with_group, group:)
+        create_list(:form, 2, :with_group, group:)
+        create(:form, :archived, :with_group, group:)
 
         login_as_super_admin_user
 
@@ -45,10 +47,16 @@ RSpec.describe OrganisationsController, type: :request do
         expect(response.body).to include(closed_organisation.name)
       end
 
-      it "shows the number of forms in each organisation" do
+      it "shows the number of live forms in each organisation, not counting archived forms" do
         page = Capybara.string(response.body)
         expect(page).to have_xpath "//tbody/tr[2]/td[3]", text: "1"
         expect(page).to have_xpath "//tbody/tr[1]/td[3]", text: "0"
+      end
+
+      it "shows the number of draft forms in each organisation, not counting archived forms" do
+        page = Capybara.string(response.body)
+        expect(page).to have_xpath "//tbody/tr[2]/td[4]", text: "2"
+        expect(page).to have_xpath "//tbody/tr[1]/td[4]", text: "0"
       end
     end
 
@@ -126,8 +134,17 @@ RSpec.describe OrganisationsController, type: :request do
         expect(organisation_row_order(response).first).to eq(organisation_z.name_with_abbreviation)
       end
 
-      it "sorts by form count descending" do
-        get path, params: { filter: { sort: "forms" } }
+      it "sorts by live form count descending" do
+        group = create :group, organisation: organisation_z
+        create(:form, :live, :with_group, group:)
+
+        get path, params: { filter: { sort: "live_forms" } }
+
+        expect(organisation_row_order(response).first).to eq(organisation_z.name_with_abbreviation)
+      end
+
+      it "sorts by draft form count descending" do
+        get path, params: { filter: { sort: "draft_forms" } }
 
         expect(organisation_row_order(response).first).to eq(organisation_n.name_with_abbreviation)
       end

@@ -1510,9 +1510,10 @@ en:
           label: Name
         sort:
           agreement_date: Date first agreement signed (newest first)
-          forms: Forms (most first)
+          draft_forms: Draft forms (most first)
           hint: Choose how to order the list
           label: Sort by
+          live_forms: Live forms (most first)
           name: Name (A to Z)
           users: Users (most first)
         submit: Filter
@@ -1524,7 +1525,8 @@ en:
       table_caption: All organisations
       table_headings:
         agreement_type: Agreement type
-        forms: Forms
+        draft_forms: Draft forms
+        live_forms: Live forms
         name: Name
         users: Users
     show:
@@ -1541,10 +1543,11 @@ en:
       summary:
         closed: Closed
         created_at: Created
-        forms: Number of forms
+        draft_forms: Number of draft forms
         govuk_content_id: GOV.UK content ID
         groups: Number of groups
         internal: Internal
+        live_forms: Number of live forms
         slug: Slug
         users: Number of users
   page_conditions:

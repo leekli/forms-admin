@@ -5,7 +5,8 @@ describe "organisations/index.html.erb" do
   let(:closed_organisation) { create :organisation, slug: "closed-department", closed: true }
   let(:organisations) { [organisation, closed_organisation] }
   let(:user_counts) { { organisation.id => 3 } }
-  let(:form_counts) { { organisation.id => 2 } }
+  let(:live_form_counts) { { organisation.id => 2 } }
+  let(:draft_form_counts) { { organisation.id => 4 } }
   let(:agreement_types) { { organisation.id => %w[crown] } }
   let(:pagy) { Pagy.new(count: organisations.size, page: 1, limit: 50) }
   let(:filter_input) { Organisations::FilterInput.new }
@@ -15,7 +16,8 @@ describe "organisations/index.html.erb" do
     assign(:filter_input, filter_input)
     assign(:organisations, organisations)
     assign(:user_counts, user_counts)
-    assign(:form_counts, form_counts)
+    assign(:live_form_counts, live_form_counts)
+    assign(:draft_form_counts, draft_form_counts)
     assign(:agreement_types, agreement_types)
 
     render template: "organisations/index"
@@ -61,7 +63,8 @@ describe "organisations/index.html.erb" do
     expect(rendered).to have_select("filter[sort]", options: [
       I18n.t("organisations.index.filter.sort.name"),
       I18n.t("organisations.index.filter.sort.users"),
-      I18n.t("organisations.index.filter.sort.forms"),
+      I18n.t("organisations.index.filter.sort.live_forms"),
+      I18n.t("organisations.index.filter.sort.draft_forms"),
       I18n.t("organisations.index.filter.sort.agreement_date"),
     ])
   end
@@ -74,23 +77,25 @@ describe "organisations/index.html.erb" do
   it "contains the user and form counts" do
     expect(rendered).to have_xpath "//tbody/tr[1]/td[2]", text: "3"
     expect(rendered).to have_xpath "//tbody/tr[1]/td[3]", text: "2"
+    expect(rendered).to have_xpath "//tbody/tr[1]/td[4]", text: "4"
   end
 
   it "shows zero counts for organisations without users or forms" do
     expect(rendered).to have_xpath "//tbody/tr[2]/td[2]", text: "0"
     expect(rendered).to have_xpath "//tbody/tr[2]/td[3]", text: "0"
+    expect(rendered).to have_xpath "//tbody/tr[2]/td[4]", text: "0"
   end
 
   it "shows the agreement type for each organisation" do
-    expect(rendered).to have_xpath "//tbody/tr[1]/td[4]", text: I18n.t("mou_signatures.index.agreement_type.crown")
-    expect(rendered).to have_xpath "//tbody/tr[2]/td[4]", text: I18n.t("organisations.index.agreement_type_none")
+    expect(rendered).to have_xpath "//tbody/tr[1]/td[5]", text: I18n.t("mou_signatures.index.agreement_type.crown")
+    expect(rendered).to have_xpath "//tbody/tr[2]/td[5]", text: I18n.t("organisations.index.agreement_type_none")
   end
 
   context "when an organisation has both agreement types" do
     let(:agreement_types) { { organisation.id => %w[crown non_crown] } }
 
     it "shows both agreement types" do
-      expect(rendered).to have_xpath "//tbody/tr[1]/td[4]", text: "Crown MOU, Non-crown agreement"
+      expect(rendered).to have_xpath "//tbody/tr[1]/td[5]", text: "Crown MOU, Non-crown agreement"
     end
   end
 

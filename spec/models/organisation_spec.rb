@@ -106,6 +106,60 @@ RSpec.describe Organisation, type: :model do
       end
     end
 
+    describe ".order_by_live_form_count" do
+      let!(:organisation_with_two_live_forms) { create :organisation, slug: "org-with-two-live-forms" }
+      let!(:organisation_with_one_live_form) { create :organisation, slug: "org-with-one-live-form" }
+      let!(:organisation_with_draft_form) { create :organisation, slug: "org-with-draft-form" }
+
+      before do
+        two_live_group = create :group, organisation: organisation_with_two_live_forms
+        create :form, :live, :with_group, group: two_live_group
+        create :form, :live_with_draft, :with_group, group: two_live_group
+
+        one_live_group = create :group, organisation: organisation_with_one_live_form
+        create :form, :live, :with_group, group: one_live_group
+        create :form, :archived, :with_group, group: one_live_group
+
+        draft_group = create :group, organisation: organisation_with_draft_form
+        create :form, :with_group, group: draft_group
+      end
+
+      it "orders by live form count, most first, counting live with draft but not draft or archived forms" do
+        expect(described_class.order_by_live_form_count).to eq [
+          organisation_with_two_live_forms,
+          organisation_with_one_live_form,
+          organisation_with_draft_form,
+        ]
+      end
+    end
+
+    describe ".order_by_draft_form_count" do
+      let!(:organisation_with_two_draft_forms) { create :organisation, slug: "org-with-two-draft-forms" }
+      let!(:organisation_with_one_draft_form) { create :organisation, slug: "org-with-one-draft-form" }
+      let!(:organisation_with_live_form) { create :organisation, slug: "org-with-live-form" }
+
+      before do
+        two_draft_group = create :group, organisation: organisation_with_two_draft_forms
+        create_list :form, 2, :with_group, group: two_draft_group
+
+        one_draft_group = create :group, organisation: organisation_with_one_draft_form
+        create :form, :with_group, group: one_draft_group
+        create :form, :live_with_draft, :with_group, group: one_draft_group
+        create :form, :archived_with_draft, :with_group, group: one_draft_group
+
+        live_group = create :group, organisation: organisation_with_live_form
+        create :form, :live, :with_group, group: live_group
+      end
+
+      it "orders by draft form count, most first, not counting live or archived forms with drafts" do
+        expect(described_class.order_by_draft_form_count).to eq [
+          organisation_with_two_draft_forms,
+          organisation_with_one_draft_form,
+          organisation_with_live_form,
+        ]
+      end
+    end
+
     describe ".order_by_first_agreement_date" do
       let!(:organisation_signed_last_week) { create :organisation, slug: "org-signed-last-week" }
       let!(:organisation_signed_last_year) { create :organisation, slug: "org-signed-last-year" }
