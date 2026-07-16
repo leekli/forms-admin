@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_15_095436) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_16_171610) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -70,6 +70,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_15_095436) do
     t.bigint "form_id", null: false
     t.string "formats", default: [], null: false, array: true
     t.datetime "updated_at", null: false
+    t.index ["form_id", "delivery_method", "delivery_schedule"], name: "idx_on_form_id_delivery_method_delivery_schedule_be17307eef", unique: true
     t.index ["form_id"], name: "index_delivery_configurations_on_form_id"
   end
 
