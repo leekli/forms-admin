@@ -22,6 +22,9 @@ FactoryBot.define do
     send_weekly_submission_batch { false }
     send_copy_of_answers { "disabled" }
     brand_id { nil }
+    s3_bucket_aws_account_id { nil }
+    s3_bucket_name { nil }
+    s3_bucket_region { nil }
 
     trait :with_brand do
       brand_id { "test-brand" }
@@ -169,6 +172,12 @@ FactoryBot.define do
       privacy_policy_url_cy { "#{privacy_policy_url}/cy" }
       support_email_cy { support_email }
       what_happens_next_markdown_cy { "Fel arfer, rydym yn ymateb i geisiadau o fewn 10 diwrnod gwaith." }
+    end
+
+    trait :with_s3_configuration do
+      s3_bucket_name { "test-bucket" }
+      s3_bucket_aws_account_id { "123456789012" }
+      s3_bucket_region { "eu-west-1" }
     end
   end
 end
