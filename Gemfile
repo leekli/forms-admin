@@ -82,7 +82,7 @@ gem "csv"
 gem "acts_as_list"
 
 # Add state machine for forms
-gem "aasm", "~> 5.5"
+gem "aasm", "~> 6.0"
 # Used by AASM to autocommit state changes when even method is used with bang eg. make_live!
 gem "after_commit_everywhere", "~> 1.6"
 
