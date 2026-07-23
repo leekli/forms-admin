@@ -612,7 +612,7 @@ RSpec.describe ReportsController, type: :request do
         archived_form = create(:form, :archived)
         [*live_forms, archived_form]
       end
-      let(:expected_csv_filename) { "live_forms_report-2025-05-15 15:31:57 UTC.csv" }
+      let(:expected_csv_filename) { "live_forms_report-20250515T153157Z.csv" }
 
       before do
         login_as_super_admin_user
@@ -639,7 +639,7 @@ RSpec.describe ReportsController, type: :request do
         form
       end
       let(:forms) { [form, *create_list(:form, 2, :live)] }
-      let(:expected_csv_filename) { "live_forms_with_routes_report-2025-05-15 15:31:57 UTC.csv" }
+      let(:expected_csv_filename) { "live_forms_with_routes_report-20250515T153157Z.csv" }
 
       before do
         login_as_super_admin_user
@@ -664,7 +664,7 @@ RSpec.describe ReportsController, type: :request do
     describe "#forms_with_payments as csv" do
       let(:form) { create(:form, :live, payment_url: "https://www.gov.uk/payments/organisation/service") }
       let(:forms) { [form, *create_list(:form, 2, :live)] }
-      let(:expected_csv_filename) { "live_forms_with_payments_report-2025-05-15 15:31:57 UTC.csv" }
+      let(:expected_csv_filename) { "live_forms_with_payments_report-20250515T153157Z.csv" }
 
       before do
         login_as_super_admin_user
@@ -689,7 +689,7 @@ RSpec.describe ReportsController, type: :request do
     describe "#forms_with_csv_submission_enabled as csv" do
       let(:form) { create(:form, :live, submission_type: "email", submission_format: %w[csv]) }
       let(:forms) { [form, *create_list(:form, 2, :live)] }
-      let(:expected_csv_filename) { "live_forms_with_csv_submission_email_attachments_report-2025-05-15 15:31:57 UTC.csv" }
+      let(:expected_csv_filename) { "live_forms_with_csv_submission_email_attachments_report-20250515T153157Z.csv" }
 
       before do
         login_as_super_admin_user
@@ -714,7 +714,7 @@ RSpec.describe ReportsController, type: :request do
     describe "#forms_with_copy_of_answers_enabled as csv" do
       let(:form) { create(:form, :live, send_copy_of_answers: "enabled") }
       let(:forms) { [form, *create_list(:form, 2, :live)] }
-      let(:expected_csv_filename) { "live_forms_with_copy_of_answers_enabled_report-2025-05-15 15:31:57 UTC.csv" }
+      let(:expected_csv_filename) { "live_forms_with_copy_of_answers_enabled_report-20250515T153157Z.csv" }
 
       before do
         login_as_super_admin_user
@@ -742,7 +742,7 @@ RSpec.describe ReportsController, type: :request do
         archived_form = create(:form, :archived, pages_count: 2)
         [*live_forms, archived_form]
       end
-      let(:expected_csv_filename) { "live_questions_report-2025-05-15 15:31:57 UTC.csv" }
+      let(:expected_csv_filename) { "live_questions_report-20250515T153157Z.csv" }
 
       before do
         login_as_super_admin_user
@@ -768,7 +768,7 @@ RSpec.describe ReportsController, type: :request do
         ])
       end
       let(:forms) { [form, *create_list(:form, 2, :live)] }
-      let(:expected_csv_filename) { "live_questions_report_text_answer_type-2025-05-15 15:31:57 UTC.csv" }
+      let(:expected_csv_filename) { "live_questions_report_text_answer_type-20250515T153157Z.csv" }
 
       before do
         login_as_super_admin_user
@@ -794,7 +794,7 @@ RSpec.describe ReportsController, type: :request do
         ])
       end
       let(:forms) { [form, *create_list(:form, 2, :live)] }
-      let(:expected_csv_filename) { "live_questions_with_add_another_answer_report-2025-05-15 15:31:57 UTC.csv" }
+      let(:expected_csv_filename) { "live_questions_with_add_another_answer_report-20250515T153157Z.csv" }
 
       before do
         login_as_super_admin_user
